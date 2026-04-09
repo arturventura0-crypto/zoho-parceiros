@@ -272,6 +272,120 @@ h1.display em,h2.display em{font-style:italic;color:var(--red)}
 .r{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
 .r.on{opacity:1;transform:translateY(0)}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+/* VIEW OPERACIONAL — RELAÇÃO MÊS x PAPÉIS */
+.ops-wrap{margin-top:2rem}
+.ops-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r20);
+  padding:1.4rem 1.5rem 1.2rem;
+}
+.ops-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:1rem;
+  margin-bottom:1rem;
+}
+.ops-title{
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:3px;
+}
+.ops-sub{
+  font-size:10px;
+  color:var(--hint);
+  font-weight:500;
+}
+.ops-legend{
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+.ops-pill{
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  border-radius:100px;
+  padding:4px 10px;
+  border:1px solid var(--border);
+}
+.ops-pill.pmkt{background:#E3F5F8;color:#0B9BAF;border-color:#A0D8E2}
+.ops-pill.hunter{background:#E8F0FB;color:#226DB4;border-color:#AECAE8}
+.ops-pill.farmer{background:#FDEBE6;color:#E8503A;border-color:#F5C4BA}
+.ops-table-wrap{overflow-x:auto}
+.ops-table{
+  width:100%;
+  min-width:900px;
+  border-collapse:separate;
+  border-spacing:0;
+}
+.ops-table th,
+.ops-table td{
+  padding:.85rem .8rem;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+}
+.ops-table thead th{
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--hint);
+  background:#F8FAFB;
+}
+.ops-table thead th:first-child{
+  text-align:left;
+  border-top-left-radius:12px;
+}
+.ops-table thead th:last-child{
+  border-top-right-radius:12px;
+}
+.ops-table tbody th{
+  text-align:left;
+  font-size:11px;
+  font-weight:700;
+  color:var(--ink);
+  white-space:nowrap;
+  background:#FCFDFE;
+}
+.ops-table tbody td{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:600;
+}
+.ops-table tbody tr:last-child th,
+.ops-table tbody tr:last-child td{
+  border-bottom:none;
+}
+.ops-table tbody tr.pmkt td{color:#0B9BAF}
+.ops-table tbody tr.hunter td{color:#226DB4}
+.ops-table tbody tr.farmer td{color:#E8503A}
+.ops-table tbody tr.revenue td{color:var(--ink2)}
+.ops-table tbody tr.accum td{color:var(--muted)}
+
+
+/* Destaques discretos meses */
+.ops-table th:nth-child(4),
+.ops-table td:nth-child(4){
+  background: rgba(11,155,175,0.06);
+}
+.ops-table th:nth-child(5),
+.ops-table td:nth-child(5){
+  background: rgba(232,80,58,0.06);
+}
+
+/* Legenda */
+.ops-footnote{
+  margin-top:.75rem;
+  font-size:10px;
+  color:var(--hint);
+  text-align:right;
+}
+
 </style>
 </head>
 <body>
@@ -413,6 +527,131 @@ h1.display em,h2.display em{font-style:italic;color:var(--red)}
       <div class="rc"><div class="rsl" style="color:var(--teal)">Agências ativas</div><div class="rv" style="color:var(--teal)">80</div><div class="rd" style="color:var(--muted)">Hunter recruta ~8 ag./mês. Após 3 meses cada uma começa a vender.</div></div>
       <div class="rc"><div class="rsl" style="color:var(--red)">Partner sales em Dez/26</div><div class="rv" style="color:var(--red)">34 vendas/mês</div><div class="rd" style="color:var(--muted)">80 ag. × 0,6 vendas × ticket R$4k = R$136k de receita mensal</div></div>
       <div class="rc feat"><div class="rsl" style="color:rgba(255,255,255,.38)">★ Meta ARR acumulado 2026</div><div class="rv" style="color:white">R$652k</div><div class="rd" style="color:rgba(255,255,255,.45)">Soma da receita gerada mês a mês com o canal estruturado.</div></div>
+    </div>
+  </div>
+
+
+  <div class="ops-wrap r d2">
+    <div class="clbl">Relação operacional — papéis por mês</div>
+    <div class="ops-card">
+      <div class="ops-head">
+        <div>
+          <div class="ops-title" style="font-size:16px; font-weight:700; letter-spacing:-.01em;">
+  Growth forecast
+</div>
+<div class="ops-sub">
+  Meses × agências recrutadas (Pmkt) × agências na base (Hunter) × vendas via partner channel (Farmer)
+</div>
+        </div>
+        <div class="ops-legend">
+          <span class="ops-pill pmkt">Pmkt</span>
+          <span class="ops-pill hunter">Hunter</span>
+          <span class="ops-pill farmer">Farmer</span>
+        </div>
+      </div>
+
+      <div class="ops-table-wrap">
+        <table class="ops-table" aria-label="Relação operacional mensal de 2026">
+          <thead>
+            <tr>
+              <th>Métrica</th>
+              <th>Jan</th>
+              <th>Fev</th>
+              <th>Mar</th>
+              <th>Abr</th>
+              <th>Mai</th>
+              <th>Jun</th>
+              <th>Jul</th>
+              <th>Ago</th>
+              <th>Set</th>
+              <th>Out</th>
+              <th>Nov</th>
+              <th>Dez</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="pmkt">
+              <th>Agências recrutadas (Pmkt)</th>
+              <td>4</td>
+              <td>5</td>
+              <td>5</td>
+              <td>6</td>
+              <td>6</td>
+              <td>6</td>
+              <td>7</td>
+              <td>7</td>
+              <td>8</td>
+              <td>8</td>
+              <td>8</td>
+              <td>8</td>
+            </tr>
+            <tr class="hunter">
+              <th>Agências na base (Hunter)</th>
+              <td>2</td>
+              <td>6</td>
+              <td>11</td>
+              <td>16</td>
+              <td>22</td>
+              <td>28</td>
+              <td>34</td>
+              <td>41</td>
+              <td>48</td>
+              <td>56</td>
+              <td>64</td>
+              <td>72</td>
+            </tr>
+            <tr class="farmer">
+              <th>Vendas via partner channel (Farmer)</th>
+              <td>0</td>
+              <td>0</td>
+              <td>2</td>
+              <td>4</td>
+              <td>7</td>
+              <td>10</td>
+              <td>14</td>
+              <td>17</td>
+              <td>21</td>
+              <td>25</td>
+              <td>29</td>
+              <td>34</td>
+            </tr>
+            <tr class="revenue">
+              <th>Revenue</th>
+              <td>—</td>
+              <td>—</td>
+              <td>R$8.000</td>
+              <td>R$16.000</td>
+              <td>R$28.000</td>
+              <td>R$40.000</td>
+              <td>R$56.000</td>
+              <td>R$68.000</td>
+              <td>R$84.000</td>
+              <td>R$100.000</td>
+              <td>R$116.000</td>
+              <td>R$136.000</td>
+            </tr>
+            <tr class="accum">
+              <th>Revenue acumulado</th>
+              <td>—</td>
+              <td>—</td>
+              <td>R$8.000</td>
+              <td>R$24.000</td>
+              <td>R$52.000</td>
+              <td>R$92.000</td>
+              <td>R$148.000</td>
+              <td>R$216.000</td>
+              <td>R$300.000</td>
+              <td>R$400.000</td>
+              <td>R$516.000</td>
+              <td>R$652.000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ops-footnote">
+        Ticket médio por venda: R$4.000,00
+      </div>
+
     </div>
   </div>
 
