@@ -176,21 +176,22 @@ html, body { height: 100%; overflow: hidden; font-family: var(--sans); backgroun
 }
 .feature-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
-  border: 1px solid var(--border); border-radius: 12px;
-  overflow: hidden; background: var(--border);
-  gap: 1px;
+  gap: 1rem;
 }
 .feature-item {
   background: var(--surface);
+  border: 1px solid var(--border); border-radius: 12px;
   padding: 1.5rem 1.4rem;
   display: flex; flex-direction: column; gap: 10px;
+  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s ease;
+  will-change: transform;
 }
 .fi-icon {
   width: 44px; height: 44px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.fi-title { font-size: 14px; font-weight: 600; color: var(--navy); }
+.fi-title { font-size: 15px; font-weight: 700; color: var(--navy); font-family: var(--serif); line-height: 1.3; }
 .fi-desc  { font-size: 12.5px; color: var(--muted); font-weight: 300; line-height: 1.6; }
 
 /* Canal cards */
@@ -519,12 +520,10 @@ html, body { height: 100%; overflow: hidden; font-family: var(--sans); backgroun
 .kpi-card   { transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(45,62,80,0.10); }
 
-.canal-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.canal-card { transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s ease; will-change: transform; }
 .canal-card:not(.c2):hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(45,62,80,0.10); }
 .canal-card.c2:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(45,62,80,0.10); }
 
-.feature-item { transition: background 0.2s ease; border-radius: 0; }
-.feature-item:hover { background: #FDFAF7; }
 
 .ins-card  { transition: box-shadow 0.2s ease; }
 .ins-card:hover  { box-shadow: 0 4px 16px rgba(45,62,80,0.08); }
@@ -570,41 +569,41 @@ html, body { height: 100%; overflow: hidden; font-family: var(--sans); backgroun
 }
 
 /* Elements start invisible, animate in when .revealed is added */
-.anim-block {
+. {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1),
               transform 0.6s cubic-bezier(0.22,1,0.36,1);
 }
-.anim-block.revealed {
+..revealed {
   opacity: 1;
   transform: translateY(0);
 }
 
 /* Stagger delays for siblings */
-.anim-block:nth-child(2) { transition-delay: 0.08s; }
-.anim-block:nth-child(3) { transition-delay: 0.16s; }
-.anim-block:nth-child(4) { transition-delay: 0.24s; }
+.:nth-child(2) { transition-delay: 0.08s; }
+.:nth-child(3) { transition-delay: 0.16s; }
+.:nth-child(4) { transition-delay: 0.24s; }
 
-.anim-pop {
+. {
   opacity: 0;
   transform: scale(0.88);
   transition: opacity 0.5s cubic-bezier(0.34,1.56,0.64,1),
               transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
 }
-.anim-pop.revealed {
+..revealed {
   opacity: 1;
   transform: scale(1);
 }
 
 /* Stat numbers pop */
 .stat-num { display: block; }
-.stat-num.anim-num {
+.stat-num. {
   opacity: 0;
   transform: scale(0.75) translateY(8px);
   transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1);
 }
-.stat-num.anim-num.revealed {
+.stat-num..revealed {
   opacity: 1;
   transform: scale(1) translateY(0);
 }
@@ -615,17 +614,11 @@ html, body { height: 100%; overflow: hidden; font-family: var(--sans); backgroun
 }
 
 /* Feature items slide from left */
-.feature-item.anim-block {
-  transform: translateX(-20px) translateY(0);
-}
-.feature-item.anim-block.revealed {
-  transform: translateX(0);
-}
 
 /* Canal cards spring in */
-.canal-card.anim-pop:nth-child(1) { transition-delay: 0.0s; }
-.canal-card.anim-pop:nth-child(2) { transition-delay: 0.12s; }
-.canal-card.anim-pop:nth-child(3) { transition-delay: 0.24s; }
+.canal-card.:nth-child(1) { transition-delay: 0.0s; }
+.canal-card.:nth-child(2) { transition-delay: 0.12s; }
+.canal-card.:nth-child(3) { transition-delay: 0.24s; }
 
 /* ── FRENTE CARDS SPOTLIGHT HOVER ── */
 @keyframes flipIn {
@@ -637,7 +630,10 @@ html, body { height: 100%; overflow: hidden; font-family: var(--sans); backgroun
   position: relative;
   cursor: default;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 0;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
 }
 
 .frente-col:hover {
@@ -649,7 +645,7 @@ html, body { height: 100%; overflow: hidden; font-family: var(--sans); backgroun
 .frente-col .spotlight {
   position: absolute;
   inset: 0;
-  border-radius: 0;
+  border-radius: 14px;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -805,20 +801,20 @@ function togglePw() {
 
   <div class="eyebrow">Camada 1</div>
   <h1 class="slide-h1">O canal de agências como<br><em>alavanca de receita</em></h1>
-  <p class="slide-p">Agências parceiras serão o principal canal de distribuição da BU de Marketing — vão gerar receita recorrente previsível com menor custo de aquisição e maior velocidade de fechamento.</p>
+  <p class="slide-p">Agências parceiras serão o principal canal de distribuição da BU de Marketing. As agências vão gerar receita recorrente previsível com menor custo de aquisição e maior velocidade de fechamento.</p>
 
   <!-- STATS -->
   <div class="stat-strip">
-    <div class="stat-cell anim-block">
-      <span class="stat-num orange anim-num">3–5×</span>
+    <div class="stat-cell">
+      <span class="stat-num orange">3–5×</span>
       <span class="stat-lbl">Menor CAC vs canal direto</span>
     </div>
-    <div class="stat-cell anim-block">
-      <span class="stat-num teal anim-num">~$700</span>
+    <div class="stat-cell">
+      <span class="stat-num teal">~$700</span>
       <span class="stat-lbl">Ticket médio mensal / parceiro</span>
     </div>
-    <div class="stat-cell anim-block">
-      <span class="stat-num green anim-num">8–12</span>
+    <div class="stat-cell">
+      <span class="stat-num green">8–12</span>
       <span class="stat-lbl">Clientes por agência ativa</span>
     </div>
   </div>
@@ -829,7 +825,7 @@ function togglePw() {
     <div class="feature-section-title">Por que agências são uma alavanca estratégica?</div>
     <div class="feature-grid">
 
-      <div class="feature-item anim-block" style="border-top:3px solid #0091AE;">
+      <div class="feature-item" style="border-top:3px solid #0091AE;">
         <div class="fi-icon" style="background:#E5F5F8;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#0091AE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
@@ -837,7 +833,7 @@ function togglePw() {
         <div class="fi-desc">Cada agência ativa traz múltiplos clientes finais para o ecossistema Zoho, ampliando o alcance sem aumentar o custo de aquisição (CAC) e o custo operacional (headcount).</div>
       </div>
 
-      <div class="feature-item anim-block" style="border-top:3px solid #FF7A59;">
+      <div class="feature-item" style="border-top:3px solid #FF7A59;">
         <div class="fi-icon" style="background:#FFF1ED;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#FF7A59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
@@ -845,7 +841,7 @@ function togglePw() {
         <div class="fi-desc">Agências chegam com contexto e confiança do cliente já estabelecidos — ciclo de vendas significativamente mais curto que no canal direto.</div>
       </div>
 
-      <div class="feature-item anim-block" style="border-top:3px solid #0091AE;">
+      <div class="feature-item" style="border-top:3px solid #0091AE;">
         <div class="fi-icon" style="background:#E5F7F2;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00A4BD" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#00A4BD" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
@@ -857,10 +853,10 @@ function togglePw() {
   </div>
 
   <!-- HOW IT WORKS -->
-  <div class="sec-label" style="margin-top:1.5rem;">Como o canal funciona</div>
+  <div class="feature-section-title" style="margin-top:1.5rem;margin-bottom:1rem;">Como o canal funciona</div>
   <div class="canal-grid">
 
-    <div class="canal-card c1 anim-pop">
+    <div class="canal-card c1">
       <div class="canal-icon" style="background:#E5F5F8;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#0091AE" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0091AE" stroke-width="2" stroke-linecap="round"/></svg>
       </div>
@@ -869,7 +865,7 @@ function togglePw() {
       <div class="canal-desc">Fornece a plataforma, suporte técnico e estrutura de comissionamento para que a agência venda com margem e segurança.</div>
     </div>
 
-    <div class="canal-card c2 anim-pop">
+    <div class="canal-card c2">
       <div class="canal-icon" style="background:rgba(255,122,89,0.18);">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#FF7A59" stroke-width="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="#FF7A59" stroke-width="2"/></svg>
       </div>
@@ -878,7 +874,7 @@ function togglePw() {
       <div class="canal-desc">Executa a venda consultiva, implementa a plataforma e gerencia o relacionamento com os clientes finais, gerando receita recorrente.</div>
     </div>
 
-    <div class="canal-card c3 anim-pop">
+    <div class="canal-card c3">
       <div class="canal-icon" style="background:#E5F7F2;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#00A4BD" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#00A4BD" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#00A4BD" stroke-width="2" stroke-linecap="round"/></svg>
       </div>
@@ -895,27 +891,27 @@ function togglePw() {
 <div class="slide" id="slide-2">
 
   <div class="eyebrow">Camada 2</div>
-  <h1 class="slide-h1">Status atual e<br><em>projeção de crescimento</em></h1>
-  <p class="slide-p">Snapshot do ecossistema hoje e cenários de crescimento de receita com a estruturação do canal.</p>
+  <h1 class="slide-h1">Status atual e projeção<br><em>de crescimento</em></h1>
+  <p class="slide-p">Momento atual do ecossistema e cenários de<br>crescimento com a estruturação do canal.</p>
 
   <!-- KPI STRIP -->
   <div class="kpi-grid">
-    <div class="kpi-card k1 anim-block">
+    <div class="kpi-card k1">
       <span class="kpi-num t">11</span>
       <span class="kpi-lbl">Agências ativas</span>
       <div class="kpi-sub">Gerando receita hoje</div>
     </div>
-    <div class="kpi-card k2 anim-block">
+    <div class="kpi-card k2">
       <span class="kpi-num g">35</span>
       <span class="kpi-lbl">No pipeline</span>
       <div class="kpi-sub">Em negociação ou onboarding</div>
     </div>
-    <div class="kpi-card k3 anim-block">
+    <div class="kpi-card k3">
       <span class="kpi-num o">N/A</span>
       <span class="kpi-lbl">Receita mensal atual</span>
       <div class="kpi-sub">MRR gerado pelo canal</div>
     </div>
-    <div class="kpi-card k4 anim-block">
+    <div class="kpi-card k4">
       <span class="kpi-num n">N/A</span>
       <span class="kpi-lbl">Ticket médio / agência</span>
       <div class="kpi-sub">Receita média mensal por parceiro</div>
@@ -925,7 +921,7 @@ function togglePw() {
   <!-- TABLE + CHART -->
   <div class="mid-grid">
 
-    <div class="t-card anim-block">
+    <div class="t-card">
       <div class="t-head">Agências no ecossistema</div>
       <div class="t-body">
       <div class="t-row"><span class="t-name">Zeniti</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
@@ -942,7 +938,7 @@ function togglePw() {
       </div>
     </div>
 
-    <div class="chart-card anim-block">
+    <div class="chart-card">
       <div style="margin-bottom:1rem;">
         <div class="chart-title" style="margin-bottom:3px;">Projeção de receita — 2026</div>
         <div style="font-size:11px;color:var(--hint);font-weight:300;">Modelo baseado em cadência de 4–8 agências/mês com ramp-up de 2 meses</div>
@@ -965,12 +961,12 @@ function togglePw() {
 
   <!-- SCENARIO STRIP -->
   <div class="sc-strip" style="grid-template-columns:1fr 1fr;">
-    <div class="sc anim-block">
+    <div class="sc">
       <div class="sc-label t">Ramp-up 2026</div>
       <div class="sc-val n">R$136k MRR</div>
       <div class="sc-desc">Receita mensal em Dez/26 · 80 agências ativas ao final do ano · 34 vendas/mês</div>
     </div>
-    <div class="sc featured anim-block">
+    <div class="sc featured">
       <div class="sc-label w">★ ARR acumulado 2026</div>
       <div class="sc-val w">R$652k</div>
       <div class="sc-desc w">Receita total acumulada no ano com estruturação do canal de parceiros</div>
@@ -1074,10 +1070,10 @@ function togglePw() {
   </div>
 
   <!-- FRENTES — HubSpot style: sem card, direto no bg, separadas por linha vertical -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--surface);margin-bottom:2rem;">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem;">
 
     <!-- Frente 01 -->
-    <div class="frente-col" data-color="#0091AE" data-bg="rgba(0,145,174,0.06)" style="padding:1.75rem 1.75rem 1.5rem;border-right:1px solid var(--border);border-top:3px solid #0091AE;"><div class="spotlight"></div>
+    <div class="frente-col" data-color="#0091AE" data-bg="rgba(0,145,174,0.06)" style="padding:1.75rem 1.75rem 1.5rem;border-top:3px solid #0091AE;"><div class="spotlight"></div>
       <div style="width:52px;height:52px;border-radius:12px;background:#E5F5F8;border:2px solid #0091AE;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#0091AE" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#0091AE" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#0091AE" stroke-width="2" stroke-linecap="round"/></svg>
       </div>
@@ -1095,23 +1091,23 @@ function togglePw() {
       <div style="font-size:10.5px;font-weight:600;color:var(--teal);background:#E5F5F8;border-radius:100px;padding:4px 12px;display:inline-block;margin-top:1rem;">Abril → Maio 2026</div>
     </div>
 
-    <!-- Frente 02 -->
-    <div class="frente-col" data-color="#FF7A59" data-bg="rgba(255,122,89,0.06)" style="padding:1.75rem 1.75rem 1.5rem;border-right:1px solid var(--border);border-top:3px solid #FF7A59;"><div class="spotlight"></div>
-      <div style="width:52px;height:52px;border-radius:12px;background:#FFF1ED;border:2px solid #FF7A59;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
+    <!-- Frente 02 — FEATURED -->
+    <div class="frente-col" data-color="#FF7A59" data-bg="rgba(255,122,89,0.12)" style="padding:1.75rem 1.75rem 1.5rem;border-top:3px solid #FF7A59;background:var(--navy) !important;box-shadow:0 12px 40px rgba(45,62,80,0.25);border-color:var(--navy) !important;"><div class="spotlight"></div>
+      <div style="width:52px;height:52px;border-radius:12px;background:rgba(255,122,89,0.2);border:2px solid #FF7A59;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#FF7A59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--orange);margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--orange);display:inline-block;"></span>Frente 02 · Converter</div>
-      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:10px;">Aceleração comercial — Farmer dedicado</div>
-      <div style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:1.25rem;">Criar um processo ativo de co-venda e gestão de parceiros existentes, com cadência clara de contato, playbook e incentivos para aumentar a recorrência e consistência em vendas via canal de parceiros.</div>
-      <div style="border-top:1px solid var(--border);padding-top:1rem;margin-bottom:0.75rem;">
-        <div style="font-size:9.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--hint);margin-bottom:10px;">Entregas</div>
-        <div style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;display:flex;flex-direction:column;gap:6px;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF7A59;margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#FF7A59;display:inline-block;"></span>Frente 02 · Converter</div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:white;line-height:1.3;margin-bottom:10px;">Aceleração comercial — Farmer dedicado</div>
+      <div style="font-size:12.5px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.65;margin-bottom:1.25rem;">Criar um processo ativo de co-venda e gestão de parceiros existentes, com cadência clara de contato, playbook e incentivos para aumentar a recorrência e consistência em vendas via canal de parceiros.</div>
+      <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:1rem;margin-bottom:0.75rem;">
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px;">Entregas</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.6;display:flex;flex-direction:column;gap:6px;">
           <div>· Playbook de co-venda com regras e papéis</div>
           <div>· Cadência mensal de contato e revisão de pipeline</div>
           <div>· Programa de incentivos por tier de performance</div>
         </div>
       </div>
-      <div style="font-size:10.5px;font-weight:600;color:var(--orange);background:#FFF1ED;border-radius:100px;padding:4px 12px;display:inline-block;margin-top:1rem;">Abril → Maio 2026</div>
+      <div style="font-size:10.5px;font-weight:600;color:#FF7A59;background:rgba(255,122,89,0.15);border-radius:100px;padding:4px 12px;display:inline-block;margin-top:1rem;">Abril → Maio 2026</div>
     </div>
 
     <!-- Frente 03 -->
@@ -1135,19 +1131,19 @@ function togglePw() {
 
   </div>
 
+
   <!-- INSUMOS + TIMELINE -->
   <div class="ins-grid">
 
-    <div class="ins-card anim-block">
+    <div class="ins-card">
       <div class="ins-title">Insumos necessários</div>
       <div class="ins-row">
         <span class="ins-badge ib-hi">Crítico</span>
         <span class="ins-text">Headcount — farmer dedicado para aceleração comercial dos parceiros</span>
       </div>
-
     </div>
 
-    <div class="tl-card anim-block">
+    <div class="tl-card">
       <div class="tl-title">Timeline de execução</div>
       <div class="tl-grid">
         <div></div>
@@ -1285,29 +1281,13 @@ function goTo(n) {
 function prev() { if (cur > 1) goToWithReveal(cur - 1); }
 function next() { if (cur < total) goToWithReveal(cur + 1); }
 
-/* ── STAGGER REVEAL ── */
-function revealSlide(slideId) {
-  const slide = document.getElementById(slideId);
-  if (!slide) return;
-  const els = slide.querySelectorAll('.anim-block, .anim-pop, .anim-num');
-  els.forEach(el => el.classList.remove('revealed'));
-  els.forEach((el, i) => {
-    setTimeout(() => el.classList.add('revealed'), 80 + i * 55);
-  });
-}
-
-function goToWithReveal(n) {
-  goTo(n);
-  setTimeout(() => revealSlide('slide-' + n), 120);
-}
+function revealSlide(slideId) { /* no-op — elements always visible */ }
+function goToWithReveal(n) { goTo(n); }
 
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
   if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prev();
 });
-
-// Initial reveal on slide 1
-setTimeout(() => revealSlide('slide-1'), 250);
 
 /* ── SPOTLIGHT EFFECT ON FRENTE CARDS ── */
 document.querySelectorAll('.frente-col').forEach(card => {
@@ -1319,6 +1299,32 @@ document.querySelectorAll('.frente-col').forEach(card => {
   });
   card.addEventListener('mouseleave', () => { spotlight.style.background = 'transparent'; });
 });
+
+/* ── TILT EFFECT ON CARDS ── */
+function addTilt(selector, maxTilt = 8, liftY = -6, shadow = '0 16px 40px rgba(45,62,80,0.13)') {
+  document.querySelectorAll(selector).forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - 0.5;  // -0.5 to 0.5
+      const y = (e.clientY - r.top)  / r.height - 0.5;
+      const tiltX = (-y * maxTilt).toFixed(2);
+      const tiltY = ( x * maxTilt).toFixed(2);
+      card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(${liftY}px) scale(1.02)`;
+      card.style.boxShadow = shadow;
+      card.style.zIndex = '2';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.boxShadow = '';
+      card.style.zIndex = '';
+    });
+  });
+}
+
+addTilt('.feature-item', 7, -5, '0 12px 36px rgba(45,62,80,0.12)');
+addTilt('.canal-card',   7, -5, '0 12px 36px rgba(45,62,80,0.12)');
+addTilt('.frente-col',   6, -4, '0 16px 40px rgba(45,62,80,0.18)');
+
 </script>
 </body>
 </html>
