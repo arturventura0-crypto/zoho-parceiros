@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zoho · Canal de Agências Parceiras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Lexend+Deca:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── TOKENS ── */
+:root {
+  --orange:  #FF7A59;
+  --navy:    #2D3E50;
+  --teal:    #0091AE;
+  --green:   #00A4BD;
+  --bg:      #F5F0EB;
+  --surface: #FFFFFF;
+  --border:  #E8E0D8;
+  --text:    #2D3E50;
+  --muted:   #516F90;
+  --hint:    #99ACC2;
+  --serif:   'Playfair Display', Georgia, serif;
+  --sans:    'Lexend Deca', system-ui, sans-serif;
+}
+
+/* ── BASE ── */
+html, body { height: 100%; overflow: hidden; font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.5; }
+
+/* ── SHELL ── */
+.shell { display: grid; grid-template-rows: 44px 1fr 60px; height: 100vh; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem;
+  flex-shrink: 0;
+}
+.tl { display: flex; align-items: center; gap: 12px; }
+.t-dots { display: flex; gap: 3px; }
+.t-dot { width: 8px; height: 8px; border-radius: 2px; }
+.t-brand { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--navy); letter-spacing: 0.06em; }
+.t-sep { color: var(--border); font-size: 18px; font-weight: 300; }
+.t-sub { font-size: 12px; color: var(--hint); font-weight: 400; }
+.t-counter {
+  font-size: 11px; color: var(--hint); letter-spacing: 0.1em;
+  background: var(--bg); border-radius: 100px;
+  padding: 3px 12px; font-weight: 400;
+}
+
+/* ── SLIDES ── */
+.slides { position: relative; overflow: hidden; }
+.slide {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  padding: 2.5rem 3rem 2rem;
+  opacity: 0; transform: translateX(32px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+.slide.out    { opacity: 0; transform: translateX(-32px); }
+
+/* ── BOTTOM NAV ── */
+.bottomnav {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem;
+  flex-shrink: 0;
+}
+.nav-tabs { display: flex; }
+.nav-tab {
+  height: 60px; padding: 0 1.4rem;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 400; color: var(--hint);
+  border-bottom: 3px solid transparent;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.nav-tab:hover { color: var(--navy); }
+.nav-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+.tab-pill {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--border); color: var(--hint);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; transition: all 0.2s;
+}
+.nav-tab.active .tab-pill { background: var(--orange); color: white; }
+.nav-arrows { display: flex; gap: 8px; }
+.nav-btn {
+  width: 34px; height: 34px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--navy); transition: all 0.2s;
+}
+.nav-btn:hover:not(:disabled) { background: var(--navy); color: white; border-color: var(--navy); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── SHARED TYPOGRAPHY ── */
+.eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--orange);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.eyebrow::before {
+  content: ''; width: 20px; height: 2px;
+  background: var(--orange); border-radius: 2px; flex-shrink: 0;
+}
+.slide-h1 {
+  font-family: var(--serif);
+  font-size: clamp(30px, 3.5vw, 44px);
+  font-weight: 800; line-height: 1.1;
+  color: var(--navy); letter-spacing: -0.025em;
+  margin-bottom: 1rem;
+}
+.slide-h1 em { font-style: italic; color: var(--orange); }
+.slide-p {
+  font-size: 15px; font-weight: 300; color: var(--muted);
+  line-height: 1.7; max-width: 540px; margin-bottom: 2rem;
+}
+
+/* ── CARD BASE ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.4rem;
+}
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--hint);
+  margin-bottom: 1rem;
+}
+
+/* ════════════════════════
+   SLIDE 1
+════════════════════════ */
+
+/* Stat strip */
+.stat-strip {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  margin-bottom: 2rem;
+}
+.stat-cell {
+  padding: 1.25rem 1.5rem;
+  border-right: 1px solid var(--border);
+}
+.stat-cell:last-child { border-right: none; }
+.stat-num {
+  font-family: var(--serif);
+  font-size: 38px; font-weight: 800; line-height: 1;
+  display: block; margin-bottom: 4px;
+}
+.stat-num.orange { color: var(--orange); }
+.stat-num.teal   { color: var(--teal); }
+.stat-num.green  { color: var(--green); }
+.stat-lbl {
+  font-size: 11px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.1em; font-weight: 400;
+}
+
+/* Feature rows — HubSpot style: icon left, text right, divider between */
+.feature-section { margin-bottom: 2rem; }
+.feature-section-title {
+  font-family: var(--serif);
+  font-size: 20px; font-weight: 700; color: var(--navy);
+  margin-bottom: 1.5rem;
+}
+.feature-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden; background: var(--border);
+  gap: 1px;
+}
+.feature-item {
+  background: var(--surface);
+  padding: 1.5rem 1.4rem;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.fi-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.fi-title { font-size: 14px; font-weight: 600; color: var(--navy); }
+.fi-desc  { font-size: 12.5px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+
+/* Canal cards */
+.canal-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; margin-bottom: 0;
+}
+.canal-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.4rem;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.canal-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; border-radius: 12px 12px 0 0;
+}
+.canal-card.c1::before { background: var(--teal); }
+.canal-card.c2::before { background: var(--orange); }
+.canal-card.c3::before { background: var(--green); }
+.canal-card.c2 { background: var(--navy); transform: scale(1.02); box-shadow: 0 8px 28px rgba(45,62,80,0.16); z-index: 1; }
+.canal-eyebrow {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.canal-eyebrow.t { color: var(--teal); }
+.canal-eyebrow.o { color: var(--orange); }
+.canal-eyebrow.g { color: var(--green); }
+.canal-title {
+  font-family: var(--serif); font-size: 16px; font-weight: 700;
+  color: var(--navy); line-height: 1.3;
+}
+.canal-card.c2 .canal-title { color: white; }
+.canal-desc { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+.canal-card.c2 .canal-desc { color: rgba(255,255,255,0.5); }
+.canal-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Source note */
+.source-note {
+  font-size: 10.5px; color: var(--hint); font-weight: 300;
+  font-style: italic; margin-top: 1rem;
+}
+
+/* ════════════════════════
+   SLIDE 2
+════════════════════════ */
+
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1rem; margin-bottom: 1.75rem;
+}
+.kpi-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.1rem 1.3rem;
+  position: relative; overflow: hidden;
+}
+.kpi-card::after {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  border-radius: 12px 12px 0 0;
+}
+.kpi-card.k1::after { background: var(--teal); }
+.kpi-card.k2::after { background: var(--green); }
+.kpi-card.k3::after { background: var(--orange); }
+.kpi-card.k4::after { background: var(--navy); }
+.kpi-num {
+  font-family: var(--serif); font-size: 34px; font-weight: 800;
+  display: block; line-height: 1; margin-bottom: 4px;
+}
+.kpi-num.t { color: var(--teal); }
+.kpi-num.g { color: var(--green); }
+.kpi-num.o { color: var(--orange); }
+.kpi-num.n { color: var(--navy); }
+.kpi-lbl { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 400; }
+.kpi-sub { font-size: 11px; color: var(--hint); margin-top: 5px; font-weight: 300; }
+
+.mid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; align-items: stretch; }
+
+/* Table */
+.t-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.t-head { padding: 0.9rem 1.2rem; border-bottom: 1px solid var(--border); font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); flex-shrink: 0; }
+.t-body { overflow-y: auto; flex: 1; }
+.t-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 1rem; padding: 0.6rem 1.2rem; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+.t-row:last-child { border-bottom: none; }
+.t-name { color: var(--navy); }
+.t-badge { font-size: 10px; font-weight: 500; padding: 2px 9px; border-radius: 100px; white-space: nowrap; }
+.tb-a { background: #E5F7F0; color: #007A5C; }
+.tb-o { background: #FFF1ED; color: var(--orange); }
+.tb-p { background: #E5F5F8; color: var(--teal); }
+.t-val { font-size: 12px; color: var(--muted); }
+
+/* Bar chart */
+.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
+.chart-title { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
+.bar-chart { display: flex; align-items: flex-end; gap: 12px; height: 110px; margin-bottom: 8px; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.bar-wrap { width: 100%; display: flex; align-items: flex-end; height: 90px; }
+.bar { width: 100%; border-radius: 6px 6px 0 0; position: relative; }
+.bar-val { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; white-space: nowrap; }
+.bar-lbl { font-size: 10px; color: var(--hint); text-align: center; }
+
+/* Scenario strip */
+.sc-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.sc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.3rem; }
+.sc.featured { background: var(--navy); border-color: var(--navy); }
+.sc-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+.sc-label.t { color: var(--teal); }
+.sc-label.o { color: var(--orange); }
+.sc-label.w { color: rgba(255,255,255,0.4); }
+.sc-val { font-family: var(--serif); font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+.sc-val.n { color: var(--navy); }
+.sc-val.w { color: white; }
+.sc-desc { font-size: 11.5px; color: var(--muted); font-weight: 300; line-height: 1.45; }
+.sc-desc.w { color: rgba(255,255,255,0.45); }
+
+/* ════════════════════════
+   SLIDE 3
+════════════════════════ */
+
+.s3-header { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 2rem; margin-bottom: 1.75rem; }
+.deadline {
+  background: var(--navy); border-radius: 10px; padding: 1rem 1.4rem; text-align: center; white-space: nowrap;
+}
+.deadline-lbl { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; }
+.deadline-val { font-family: var(--serif); font-size: 20px; font-weight: 700; color: white; }
+
+.rm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.rm-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.rm-top { padding: 1.2rem 1.3rem 1rem; border-bottom: 1px solid var(--border); flex: 1; }
+.rm-bot { padding: 1rem 1.3rem; background: #FAF6F2; }
+.rm-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.rm-tag-dot { width: 6px; height: 6px; border-radius: 50%; }
+.rt-t { color: var(--teal); } .rt-t .rm-tag-dot { background: var(--teal); }
+.rt-g { color: var(--green); } .rt-g .rm-tag-dot { background: var(--green); }
+.rt-o { color: var(--orange); } .rt-o .rm-tag-dot { background: var(--orange); }
+.rm-title { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 7px; line-height: 1.3; }
+.rm-desc { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.55; }
+.rm-steps-lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hint); margin-bottom: 8px; }
+.rm-step { display: flex; align-items: flex-start; gap: 7px; font-size: 11.5px; color: var(--muted); margin-bottom: 5px; line-height: 1.35; }
+.rm-step:last-of-type { margin-bottom: 10px; }
+.rm-step-dot { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.rm-dl { font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 100px; display: inline-block; }
+.rm-dl.t { background: #E5F5F8; color: var(--teal); }
+.rm-dl.g { background: #E5F7F2; color: var(--green); }
+.rm-dl.o { background: #FFF1ED; color: var(--orange); }
+
+.ins-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.ins-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
+.ins-title { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
+.ins-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.ins-row:last-child { border-bottom: none; padding-bottom: 0; }
+.ins-badge { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+.ib-hi  { background: #FFF1ED; color: #C0392B; }
+.ib-med { background: #E5F5F8; color: var(--teal); }
+.ins-text { color: var(--muted); font-weight: 300; line-height: 1.45; }
+
+.tl-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
+.tl-title { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
+.tl-grid { display: grid; grid-template-columns: 72px repeat(6, 1fr); gap: 4px; align-items: center; }
+.tl-month { text-align: center; font-size: 9px; color: var(--hint); text-transform: uppercase; letter-spacing: 0.08em; }
+.tl-row-label { font-size: 10px; font-weight: 500; }
+.tl-bar { height: 22px; border-radius: 4px; }
+.tl-legend { display: flex; gap: 1rem; margin-top: 10px; flex-wrap: wrap; }
+.tl-leg-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
+.tl-leg-dot { width: 10px; height: 7px; border-radius: 2px; }
+
+/* ── ANIMATIONS ── */
+
+/* Fade + slide up for slide children */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes growX {
+  from { transform: scaleX(0); transform-origin: left; }
+  to   { transform: scaleX(1); transform-origin: left; }
+}
+
+/* Slide children stagger */
+.slide.active .eyebrow        { animation: fadeUp 0.5s ease both; animation-delay: 0.05s; }
+.slide.active .slide-h1       { animation: fadeUp 0.5s ease both; animation-delay: 0.12s; }
+.slide.active .slide-p        { animation: fadeUp 0.5s ease both; animation-delay: 0.18s; }
+.slide.active .stat-strip     { animation: fadeUp 0.5s ease both; animation-delay: 0.22s; }
+.slide.active .source-note    { animation: fadeUp 0.4s ease both; animation-delay: 0.26s; }
+.slide.active .feature-section{ animation: fadeUp 0.5s ease both; animation-delay: 0.28s; }
+.slide.active .sec-label      { animation: fadeUp 0.4s ease both; animation-delay: 0.32s; }
+.slide.active .canal-grid     { animation: fadeUp 0.5s ease both; animation-delay: 0.36s; }
+.slide.active .kpi-grid       { animation: fadeUp 0.5s ease both; animation-delay: 0.20s; }
+.slide.active .mid-grid       { animation: fadeUp 0.5s ease both; animation-delay: 0.30s; }
+.slide.active .sc-strip       { animation: fadeUp 0.5s ease both; animation-delay: 0.40s; }
+.slide.active .s3-header      { animation: fadeUp 0.4s ease both; animation-delay: 0.10s; }
+.slide.active .ins-grid       { animation: fadeUp 0.5s ease both; animation-delay: 0.45s; }
+
+/* Timeline bars grow */
+.slide.active .tl-bar {
+  animation: growX 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.slide.active .tl-grid > *:nth-child(2)  .tl-bar,
+.slide.active .tl-bar:nth-child(2)  { animation-delay: 0.4s; }
+.slide.active .tl-bar:nth-child(3)  { animation-delay: 0.5s; }
+.slide.active .tl-bar:nth-child(4)  { animation-delay: 0.6s; }
+.slide.active .tl-bar:nth-child(5)  { animation-delay: 0.7s; }
+.slide.active .tl-bar:nth-child(6)  { animation-delay: 0.8s; }
+
+/* Hover lift on cards */
+.canal-card, .ins-card, .tl-card, .kpi-card, .chart-card, .t-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.canal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 32px rgba(45,62,80,0.10);
+}
+.kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(45,62,80,0.09);
+}
+.ins-card:hover, .tl-card:hover, .chart-card:hover, .t-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(45,62,80,0.08);
+}
+
+/* Stat strip cells pulse on enter */
+@keyframes statPop {
+  0%   { transform: scale(0.92); opacity: 0; }
+  60%  { transform: scale(1.03); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.slide.active .stat-cell:nth-child(1) { animation: statPop 0.5s ease both; animation-delay: 0.3s; }
+.slide.active .stat-cell:nth-child(2) { animation: statPop 0.5s ease both; animation-delay: 0.4s; }
+.slide.active .stat-cell:nth-child(3) { animation: statPop 0.5s ease both; animation-delay: 0.5s; }
+
+/* Roadmap frente columns stagger */
+.slide.active .rm-cols > div:nth-child(1) { animation: fadeUp 0.5s ease both; animation-delay: 0.25s; }
+.slide.active .rm-cols > div:nth-child(2) { animation: fadeUp 0.5s ease both; animation-delay: 0.35s; }
+.slide.active .rm-cols > div:nth-child(3) { animation: fadeUp 0.5s ease both; animation-delay: 0.45s; }
+
+/* Smooth nav tab indicator */
+.nav-tab { transition: color 0.2s ease, border-color 0.2s ease; }
+.tab-pill { transition: background 0.2s ease, color 0.2s ease; }
+
+/* Topbar dot hover */
+.t-dot {
+  transition: transform 0.2s ease;
+}
+.t-dot:hover { transform: scale(1.4); }
+
+
+/* ════════════════════════
+   ANIMATIONS
+════════════════════════ */
+
+/* Keyframes */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes barGrow {
+  from { transform: scaleY(0); transform-origin: bottom; }
+  to   { transform: scaleY(1); transform-origin: bottom; }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseOrb {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,122,89,0.15); }
+  50%       { box-shadow: 0 0 0 8px rgba(255,122,89,0); }
+}
+
+/* Slide entry — stagger children */
+.slide.active .eyebrow     { animation: slideRight 0.5s ease both; animation-delay: 0.05s; }
+.slide.active .slide-h1    { animation: fadeUp 0.55s ease both; animation-delay: 0.12s; }
+.slide.active .slide-p     { animation: fadeUp 0.55s ease both; animation-delay: 0.18s; }
+
+/* Stat strip */
+.slide.active .stat-strip  { animation: fadeUp 0.55s ease both; animation-delay: 0.22s; }
+.slide.active .source-note { animation: fadeIn 0.5s ease both; animation-delay: 0.35s; }
+
+/* Feature grid items — stagger */
+.slide.active .feature-item:nth-child(1) { animation: fadeUp 0.5s ease both; animation-delay: 0.28s; }
+.slide.active .feature-item:nth-child(2) { animation: fadeUp 0.5s ease both; animation-delay: 0.38s; }
+.slide.active .feature-item:nth-child(3) { animation: fadeUp 0.5s ease both; animation-delay: 0.48s; }
+
+/* Canal cards */
+.slide.active .canal-card.c1 { animation: scaleIn 0.5s ease both; animation-delay: 0.32s; }
+.slide.active .canal-card.c2 { animation: scaleIn 0.5s ease both; animation-delay: 0.42s; }
+.slide.active .canal-card.c3 { animation: scaleIn 0.5s ease both; animation-delay: 0.52s; }
+
+/* Slide 2 KPI cards */
+.slide.active .kpi-card.k1 { animation: fadeUp 0.45s ease both; animation-delay: 0.22s; }
+.slide.active .kpi-card.k2 { animation: fadeUp 0.45s ease both; animation-delay: 0.30s; }
+.slide.active .kpi-card.k3 { animation: fadeUp 0.45s ease both; animation-delay: 0.38s; }
+.slide.active .kpi-card.k4 { animation: fadeUp 0.45s ease both; animation-delay: 0.46s; }
+.slide.active .mid-grid    { animation: fadeUp 0.5s ease both; animation-delay: 0.52s; }
+.slide.active .sc-strip    { animation: fadeUp 0.5s ease both; animation-delay: 0.60s; }
+
+/* Slide 3 frentes & insumos */
+.slide.active .s3-header   { animation: fadeUp 0.5s ease both; animation-delay: 0.18s; }
+.slide.active .ins-grid    { animation: fadeUp 0.5s ease both; animation-delay: 0.55s; }
+
+/* Deadline badge pulse */
+.slide.active .deadline { animation: scaleIn 0.5s ease both, pulseOrb 2s ease 0.8s 2; animation-delay: 0.25s; }
+
+/* Hover effects */
+.kpi-card   { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.kpi-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(45,62,80,0.10); }
+
+.canal-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.canal-card:not(.c2):hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(45,62,80,0.10); }
+.canal-card.c2:hover { transform: scale(1.04); box-shadow: 0 12px 32px rgba(45,62,80,0.22); }
+
+.feature-item { transition: background 0.2s ease; border-radius: 0; }
+.feature-item:hover { background: #FDFAF7; }
+
+.ins-card  { transition: box-shadow 0.2s ease; }
+.ins-card:hover  { box-shadow: 0 4px 16px rgba(45,62,80,0.08); }
+
+.tl-card  { transition: box-shadow 0.2s ease; }
+.tl-card:hover  { box-shadow: 0 4px 16px rgba(45,62,80,0.08); }
+
+/* Nav tab hover underline slide */
+.nav-tab { position: relative; }
+.nav-tab::after {
+  content: '';
+  position: absolute; bottom: 0; left: 50%; right: 50%;
+  height: 3px; background: var(--orange);
+  transition: left 0.25s ease, right 0.25s ease;
+  border-radius: 2px 2px 0 0;
+}
+.nav-tab.active::after { left: 0; right: 0; }
+
+/* Topbar counter pill pulse on change */
+.t-counter.changed { animation: scaleIn 0.3s ease; }
+
+/* ── BLOCK REVEAL ANIMATIONS ── */
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes revealLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes numberPop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes borderDraw {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+
+/* Elements start invisible, animate in when .revealed is added */
+.anim-block {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1),
+              transform 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+.anim-block.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for siblings */
+.anim-block:nth-child(2) { transition-delay: 0.08s; }
+.anim-block:nth-child(3) { transition-delay: 0.16s; }
+.anim-block:nth-child(4) { transition-delay: 0.24s; }
+
+.anim-pop {
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity 0.5s cubic-bezier(0.34,1.56,0.64,1),
+              transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.anim-pop.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stat numbers pop */
+.stat-num { display: block; }
+.stat-num.anim-num {
+  opacity: 0;
+  transform: scale(0.75) translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1);
+}
+.stat-num.anim-num.revealed {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Shimmer loading bar on kpi accent */
+.kpi-card::after {
+  transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* Feature items slide from left */
+.feature-item.anim-block {
+  transform: translateX(-20px) translateY(0);
+}
+.feature-item.anim-block.revealed {
+  transform: translateX(0);
+}
+
+/* Canal cards spring in */
+.canal-card.anim-pop:nth-child(1) { transition-delay: 0.0s; }
+.canal-card.anim-pop:nth-child(2) { transition-delay: 0.12s; }
+.canal-card.anim-pop:nth-child(3) { transition-delay: 0.24s; }
+
+/* ── FRENTE CARDS SPOTLIGHT HOVER ── */
+@keyframes flipIn {
+  from { opacity: 0; transform: perspective(600px) rotateX(18deg) translateY(30px); }
+  to   { opacity: 1; transform: perspective(600px) rotateX(0deg) translateY(0); }
+}
+
+.frente-col {
+  position: relative;
+  cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 0;
+}
+
+.frente-col:hover {
+  transform: translateY(-2px);
+  z-index: 2;
+}
+
+/* Spotlight overlay — color injected via JS */
+.frente-col .spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.frente-col:hover .spotlight {
+  opacity: 1;
+}
+
+/* All frente content above spotlight */
+.frente-col > *:not(.spotlight) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Animate frente cols on slide entry */
+.slide.active .frente-col:nth-child(1) { animation: flipIn 0.6s cubic-bezier(0.22,1,0.36,1) both; animation-delay: 0.2s; }
+.slide.active .frente-col:nth-child(2) { animation: flipIn 0.6s cubic-bezier(0.22,1,0.36,1) both; animation-delay: 0.32s; }
+.slide.active .frente-col:nth-child(3) { animation: flipIn 0.6s cubic-bezier(0.22,1,0.36,1) both; animation-delay: 0.44s; }
+
+/* Highlight bar draw animation on top border */
+.kpi-card.revealed::after {
+  animation: borderDraw 0.6s ease both;
+}
+
+</style>
+</head>
+<body>
+<!-- PASSWORD SCREEN -->
+<div id="pw-screen" style="
+  position:fixed;inset:0;z-index:9999;
+  background:#F5F8FA;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Lexend Deca',sans-serif;
+">
+  <div style="
+    background:#fff;border:1px solid #DFE3EB;border-radius:16px;
+    padding:2.5rem 2.5rem 2rem;width:100%;max-width:380px;
+    box-shadow:0 8px 40px rgba(0,0,0,0.08);
+    text-align:center;
+  ">
+    <!-- Logo -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:1.75rem;">
+      <div style="display:flex;gap:3px;">
+        <div style="width:8px;height:8px;border-radius:2px;background:#E8503A;"></div>
+        <div style="width:8px;height:8px;border-radius:2px;background:#F5A623;"></div>
+        <div style="width:8px;height:8px;border-radius:2px;background:#5BBE6E;"></div>
+        <div style="width:8px;height:8px;border-radius:2px;background:#226DB4;"></div>
+      </div>
+      <span style="font-size:16px;font-weight:700;color:#1A1A1A;letter-spacing:0.04em;">zoho</span>
+    </div>
+
+    <h2 style="font-size:20px;font-weight:700;color:#1A1A1A;margin-bottom:6px;letter-spacing:-0.02em;">Acesso restrito</h2>
+    <p style="font-size:13px;color:#7C98B6;font-weight:300;margin-bottom:1.75rem;line-height:1.5;">Canal de Agências Parceiras<br>Apresentação executiva</p>
+
+    <div style="position:relative;margin-bottom:1rem;">
+      <input
+        id="pw-input"
+        type="password"
+        placeholder="Digite a senha de acesso"
+        onkeydown="if(event.key==='Enter')checkPw()"
+        style="
+          width:100%;padding:12px 44px 12px 16px;
+          border:1.5px solid #DFE3EB;border-radius:8px;
+          font-family:'Lexend Deca',sans-serif;font-size:14px;color:#1A1A1A;
+          outline:none;transition:border-color 0.2s;
+          background:#F5F8FA;
+        "
+        onfocus="this.style.borderColor='#FF7A59';this.style.background='#fff'"
+        onblur="this.style.borderColor='#DFE3EB';this.style.background='#F5F8FA'"
+      />
+      <svg onclick="togglePw()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;opacity:0.4;" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#1A1A1A" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="#1A1A1A" stroke-width="2"/></svg>
+    </div>
+
+    <div id="pw-error" style="font-size:12px;color:#E74C3C;margin-bottom:0.75rem;height:16px;transition:opacity 0.2s;opacity:0;"></div>
+
+    <button onclick="checkPw()" style="
+      width:100%;padding:13px;
+      background:#FF7A59;border:none;border-radius:8px;
+      font-family:'Lexend Deca',sans-serif;font-size:14px;font-weight:600;color:#fff;
+      cursor:pointer;transition:background 0.2s,transform 0.15s;
+      letter-spacing:0.02em;
+    "
+    onmouseover="this.style.background='#FF5C35'"
+    onmouseout="this.style.background='#FF7A59'"
+    onmousedown="this.style.transform='scale(0.98)'"
+    onmouseup="this.style.transform='scale(1)'"
+    >Acessar apresentação →</button>
+
+    <p style="font-size:11px;color:#B0BEC5;margin-top:1.25rem;font-weight:300;">Zoho · Marketing BU · Abril 2026</p>
+  </div>
+</div>
+
+<script>
+function checkPw() {
+  const val = document.getElementById('pw-input').value;
+  const err = document.getElementById('pw-error');
+  const btn = document.querySelector('#pw-screen button');
+
+  if (val === 'mktbu2026') {
+    const screen = document.getElementById('pw-screen');
+    screen.style.transition = 'opacity 0.5s ease';
+    screen.style.opacity = '0';
+    setTimeout(() => screen.remove(), 500);
+  } else {
+    err.textContent = 'Senha incorreta. Tente novamente.';
+    err.style.opacity = '1';
+    const input = document.getElementById('pw-input');
+    input.style.borderColor = '#E74C3C';
+    input.style.background = '#FFF5F5';
+    btn.style.background = '#E74C3C';
+    setTimeout(() => {
+      btn.style.background = '#FF7A59';
+      input.style.borderColor = '#DFE3EB';
+      input.style.background = '#F5F8FA';
+    }, 1200);
+    setTimeout(() => { err.style.opacity = '0'; }, 2500);
+    input.value = '';
+    input.focus();
+  }
+}
+
+function togglePw() {
+  const input = document.getElementById('pw-input');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+</script>
+
+<div class="shell">
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tl">
+    <div class="t-dots">
+      <div class="t-dot" style="background:#E8503A"></div>
+      <div class="t-dot" style="background:#F5A623"></div>
+      <div class="t-dot" style="background:#5BBE6E"></div>
+      <div class="t-dot" style="background:#226DB4"></div>
+    </div>
+    <span class="t-brand">zoho</span>
+    <span class="t-sep">|</span>
+    <span class="t-sub">Canal de Agências Parceiras</span>
+  </div>
+  <span class="t-counter" id="counter">01 / 03</span>
+</div>
+
+<!-- SLIDES -->
+<div class="slides">
+
+<!-- ══ SLIDE 1 ══ -->
+<div class="slide active" id="slide-1">
+
+  <div class="eyebrow">Camada 1</div>
+  <h1 class="slide-h1">O canal de agências como<br><em>alavanca de receita</em></h1>
+  <p class="slide-p">Agências parceiras serão o principal canal de distribuição da BU de Marketing — vão gerar receita recorrente previsível com menor custo de aquisição e maior velocidade de fechamento.</p>
+
+  <!-- STATS -->
+  <div class="stat-strip">
+    <div class="stat-cell anim-block">
+      <span class="stat-num orange anim-num">3–5×</span>
+      <span class="stat-lbl">Menor CAC vs canal direto</span>
+    </div>
+    <div class="stat-cell anim-block">
+      <span class="stat-num teal anim-num">~$700</span>
+      <span class="stat-lbl">Ticket médio mensal / parceiro</span>
+    </div>
+    <div class="stat-cell anim-block">
+      <span class="stat-num green anim-num">8–12</span>
+      <span class="stat-lbl">Clientes por agência ativa</span>
+    </div>
+  </div>
+  <p class="source-note">* Ticket médio estimado com base em benchmarks de canais de parceiros SaaS — PartnerStack State of the Partner Ecosystem Report 2024. Volume médio de clientes por agência — Canalys SaaS Channel Partner Benchmark 2023.</p>
+
+  <!-- WHY -->
+  <div class="feature-section" style="margin-top:1.5rem;">
+    <div class="feature-section-title">Por que agências são uma alavanca estratégica?</div>
+    <div class="feature-grid">
+
+      <div class="feature-item anim-block">
+        <div class="fi-icon" style="background:#E5F5F8;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#0091AE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="fi-title">Efeito multiplicador de receita</div>
+        <div class="fi-desc">Cada agência ativa traz múltiplos clientes finais para o ecossistema Zoho, ampliando o alcance sem aumentar o custo de aquisição (CAC) e o custo operacional (headcount).</div>
+      </div>
+
+      <div class="feature-item anim-block">
+        <div class="fi-icon" style="background:#FFF1ED;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#FF7A59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="fi-title">Velocidade de fechamento</div>
+        <div class="fi-desc">Agências chegam com contexto e confiança do cliente já estabelecidos — ciclo de vendas significativamente mais curto que no canal direto.</div>
+      </div>
+
+      <div class="feature-item anim-block">
+        <div class="fi-icon" style="background:#E5F7F2;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00A4BD" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#00A4BD" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="fi-title">Receita previsível e recorrente</div>
+        <div class="fi-desc">Parceiros bem ativados geram receita mensal estável com baixo churn, contribuindo diretamente para o ARR (Annual Recurring Revenue) da BU de Marketing.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="sec-label" style="margin-top:1.5rem;">Como o canal funciona</div>
+  <div class="canal-grid">
+
+    <div class="canal-card c1 anim-pop">
+      <div class="canal-icon" style="background:#E5F5F8;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#0091AE" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0091AE" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="canal-eyebrow t">Zoho</div>
+      <div class="canal-title">Produto · Suporte · Comissão</div>
+      <div class="canal-desc">Fornece a plataforma, suporte técnico e estrutura de comissionamento para que a agência venda com margem e segurança.</div>
+    </div>
+
+    <div class="canal-card c2 anim-pop">
+      <div class="canal-icon" style="background:rgba(255,122,89,0.18);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#FF7A59" stroke-width="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="#FF7A59" stroke-width="2"/></svg>
+      </div>
+      <div class="canal-eyebrow o">Agência Parceira</div>
+      <div class="canal-title">Implementação · Gestão · Venda</div>
+      <div class="canal-desc">Executa a venda consultiva, implementa a plataforma e gerencia o relacionamento com os clientes finais, gerando receita recorrente.</div>
+    </div>
+
+    <div class="canal-card c3 anim-pop">
+      <div class="canal-icon" style="background:#E5F7F2;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#00A4BD" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#00A4BD" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#00A4BD" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="canal-eyebrow g">Clientes Finais</div>
+      <div class="canal-title">Adoção · Renovação · Expansão</div>
+      <div class="canal-desc">Adotam a plataforma Zoho com suporte da agência, gerando contratos recorrentes que alimentam o ARR da BU de Marketing.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══ SLIDE 2 ══ -->
+<div class="slide" id="slide-2">
+
+  <div class="eyebrow">Camada 2</div>
+  <h1 class="slide-h1">Status atual e<br><em>projeção de crescimento</em></h1>
+  <p class="slide-p">Snapshot do ecossistema hoje e cenários de crescimento de receita com a estruturação do canal.</p>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-grid">
+    <div class="kpi-card k1 anim-block">
+      <span class="kpi-num t">11</span>
+      <span class="kpi-lbl">Agências ativas</span>
+      <div class="kpi-sub">Gerando receita hoje</div>
+    </div>
+    <div class="kpi-card k2 anim-block">
+      <span class="kpi-num g">35</span>
+      <span class="kpi-lbl">No pipeline</span>
+      <div class="kpi-sub">Em negociação ou onboarding</div>
+    </div>
+    <div class="kpi-card k3 anim-block">
+      <span class="kpi-num o">N/A</span>
+      <span class="kpi-lbl">Receita mensal atual</span>
+      <div class="kpi-sub">MRR gerado pelo canal</div>
+    </div>
+    <div class="kpi-card k4 anim-block">
+      <span class="kpi-num n">N/A</span>
+      <span class="kpi-lbl">Ticket médio / agência</span>
+      <div class="kpi-sub">Receita média mensal por parceiro</div>
+    </div>
+  </div>
+
+  <!-- TABLE + CHART -->
+  <div class="mid-grid">
+
+    <div class="t-card anim-block">
+      <div class="t-head">Agências no ecossistema</div>
+      <div class="t-body">
+      <div class="t-row"><span class="t-name">Zeniti</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">Bzness MKT Digital</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">Growwin</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">Corre Marketing</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">Savvi</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">Octans</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">Persuadindo</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">BLDN Digital</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">My Brief</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">Nambbu</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      <div class="t-row"><span class="t-name">AlmaLab</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
+      </div>
+    </div>
+
+    <div class="chart-card anim-block">
+      <div style="margin-bottom:1rem;">
+        <div class="chart-title" style="margin-bottom:3px;">Projeção de receita — 2026</div>
+        <div style="font-size:11px;color:var(--hint);font-weight:300;">Modelo baseado em cadência de 4–8 agências/mês com ramp-up de 2 meses</div>
+      </div>
+      <canvas id="revenueChart" height="160"></canvas>
+      <div style="height:1px;background:var(--border);margin:12px 0 10px;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 1.5rem;">
+        <div style="display:flex;align-items:flex-start;gap:8px;">
+          <div style="width:10px;height:10px;border-radius:2px;background:#88C9D8;flex-shrink:0;margin-top:2px;"></div>
+          <div style="font-size:10.5px;color:var(--muted);line-height:1.4;"><strong style="color:var(--navy);font-weight:600;">MRR</strong> — Monthly Recurring Revenue: receita mensal recorrente gerada pelo canal</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:8px;">
+          <div style="width:10px;height:10px;border-radius:2px;background:#0091AE;flex-shrink:0;margin-top:2px;"></div>
+          <div style="font-size:10.5px;color:var(--muted);line-height:1.4;"><strong style="color:var(--navy);font-weight:600;">ARR</strong> — Annual Recurring Revenue: receita anual acumulada projetada</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SCENARIO STRIP -->
+  <div class="sc-strip" style="grid-template-columns:1fr 1fr;">
+    <div class="sc anim-block">
+      <div class="sc-label t">Ramp-up 2026</div>
+      <div class="sc-val n">R$136k MRR</div>
+      <div class="sc-desc">Receita mensal em Dez/26 · 80 agências ativas ao final do ano · 34 vendas/mês</div>
+    </div>
+    <div class="sc featured anim-block">
+      <div class="sc-label w">★ ARR acumulado 2026</div>
+      <div class="sc-val w">R$652k</div>
+      <div class="sc-desc w">Receita total acumulada no ano com estruturação do canal de parceiros</div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+(function() {
+  function initChart() {
+    var canvas = document.getElementById('revenueChart');
+    if (!canvas || !window.Chart) { setTimeout(initChart, 100); return; }
+    var ctx = canvas.getContext('2d');
+    window.revenueChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Hoje', 'MRR Dez/26', 'ARR 2026'],
+        datasets: [{
+          data: [0, 136000, 652000],
+          backgroundColor: ['#CCE9EE', '#88C9D8', '#0091AE'],
+          borderRadius: 8,
+          borderSkipped: false,
+          borderWidth: 0,
+          hoverBackgroundColor: ['#B3D8DF', '#6AB8CA', '#007A95'],
+        }]
+      },
+      options: {
+        responsive: true,
+        animation: {
+          duration: 1200,
+          easing: 'easeOutQuart',
+          delay: function(ctx) { return ctx.dataIndex * 200; }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#2D3E50',
+            titleFont: { family: "'Lexend Deca', sans-serif", size: 11 },
+            bodyFont:  { family: "'Lexend Deca', sans-serif", size: 12, weight: '600' },
+            padding: 10,
+            cornerRadius: 8,
+            callbacks: {
+              title: function(items) {
+                var labels = ['Sem estruturação', 'MRR — Receita mensal em Dez/26', 'ARR — Receita acumulada 2026'];
+                return labels[items[0].dataIndex];
+              },
+              label: function(item) {
+                if (item.raw === 0) return ' N/A';
+                return ' R$' + (item.raw >= 1000000
+                  ? (item.raw/1000000).toFixed(1) + 'M'
+                  : (item.raw/1000).toFixed(0) + 'k');
+              }
+            }
+          },
+          datalabels: { display: false }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            border: { display: false },
+            ticks: {
+              color: '#99ACC2',
+              font: { family: "'Lexend Deca', sans-serif", size: 11 }
+            }
+          },
+          y: {
+            grid: { color: '#F0EAE2', lineWidth: 1 },
+            border: { display: false, dash: [4,4] },
+            ticks: {
+              color: '#99ACC2',
+              font: { family: "'Lexend Deca', sans-serif", size: 10 },
+              maxTicksLimit: 5,
+              callback: function(v) {
+                if (v === 0) return 'N/A';
+                return 'R$' + (v >= 1000000 ? (v/1000000).toFixed(1)+'M' : (v/1000).toFixed(0)+'k');
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function() { setTimeout(initChart, 300); });
+})();
+</script>
+
+<!-- ══ SLIDE 3 ══ -->
+<div class="slide" id="slide-3">
+
+  <div class="eyebrow">Camada 3</div>
+  <h1 class="slide-h1">Próximos passos e<br><em>insumos necessários</em></h1>
+
+  <div style="display:grid;grid-template-columns:1fr auto;align-items:start;gap:2rem;margin-bottom:2rem;">
+    <p class="slide-p" style="margin-bottom:0;">Três frentes de trabalho paralelas para estruturar o canal e colocar o ecossistema em modo de crescimento.</p>
+    <div class="deadline">
+      <div class="deadline-lbl">Deadline geral</div>
+      <div class="deadline-val">Q2 · 2026</div>
+    </div>
+  </div>
+
+  <!-- FRENTES — HubSpot style: sem card, direto no bg, separadas por linha vertical -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--surface);margin-bottom:2rem;">
+
+    <!-- Frente 01 -->
+    <div class="frente-col" data-color="#0091AE" data-bg="rgba(0,145,174,0.06)" style="padding:1.75rem 1.75rem 1.5rem;border-right:1px solid var(--border);border-top:3px solid #0091AE;"><div class="spotlight"></div>
+      <div style="width:52px;height:52px;border-radius:12px;background:#E5F5F8;border:2px solid #0091AE;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#0091AE" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#0091AE" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#0091AE" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--teal);display:inline-block;"></span>Frente 01 · Ativar</div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:10px;">Construção do onboarding de parceiros</div>
+      <div style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:1.25rem;">Estruturar o processo de entrada e ativação de novos parceiros, reduzindo o tempo até a primeira venda, aumentando a taxa de ativação e garantindo o engajamento durante o período starter.</div>
+      <div style="border-top:1px solid var(--border);padding-top:1rem;margin-bottom:0.75rem;">
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--hint);margin-bottom:10px;">Entregas</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;display:flex;flex-direction:column;gap:6px;">
+          <div>· Trilha de onboarding com milestones de 30 dias</div>
+          <div>· Kit de materiais: decks, battle cards, simulador de proposta</div>
+          <div>· Checkpoints de ativação e pontos de contato</div>
+        </div>
+      </div>
+      <div style="font-size:10.5px;font-weight:600;color:var(--teal);background:#E5F5F8;border-radius:100px;padding:4px 12px;display:inline-block;margin-top:1rem;">Abril → Maio 2026</div>
+    </div>
+
+    <!-- Frente 02 -->
+    <div class="frente-col" data-color="#FF7A59" data-bg="rgba(255,122,89,0.06)" style="padding:1.75rem 1.75rem 1.5rem;border-right:1px solid var(--border);border-top:3px solid #FF7A59;"><div class="spotlight"></div>
+      <div style="width:52px;height:52px;border-radius:12px;background:#FFF1ED;border:2px solid #FF7A59;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#FF7A59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--orange);margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--orange);display:inline-block;"></span>Frente 02 · Converter</div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:10px;">Aceleração comercial — Farmer dedicado</div>
+      <div style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:1.25rem;">Criar um processo ativo de co-venda e gestão de parceiros existentes, com cadência clara de contato, playbook e incentivos para aumentar a recorrência e consistência em vendas via canal de parceiros.</div>
+      <div style="border-top:1px solid var(--border);padding-top:1rem;margin-bottom:0.75rem;">
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--hint);margin-bottom:10px;">Entregas</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;display:flex;flex-direction:column;gap:6px;">
+          <div>· Playbook de co-venda com regras e papéis</div>
+          <div>· Cadência mensal de contato e revisão de pipeline</div>
+          <div>· Programa de incentivos por tier de performance</div>
+        </div>
+      </div>
+      <div style="font-size:10.5px;font-weight:600;color:var(--orange);background:#FFF1ED;border-radius:100px;padding:4px 12px;display:inline-block;margin-top:1rem;">Abril → Maio 2026</div>
+    </div>
+
+    <!-- Frente 03 -->
+    <div class="frente-col" data-color="#2D3E50" data-bg="rgba(45,62,80,0.05)" style="padding:1.75rem 1.75rem 1.5rem;border-top:3px solid #2D3E50;"><div class="spotlight"></div>
+      <div style="width:52px;height:52px;border-radius:12px;background:#E8ECF4;border:2px solid #2D3E50;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#2D3E50" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="#2D3E50" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--navy);display:inline-block;"></span>Frente 03 · Atrair</div>
+      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:10px;">Plano de growth e aquisição de parceiros</div>
+      <div style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:1.25rem;">Desenvolver um fluxo ativo de prospecção e atração de novas agências, com ICP definido, GTM estruturado e canais de aquisição claros. Além de um plano de engajamento e nutrição de agências ativas no ecossistema.</div>
+      <div style="border-top:1px solid var(--border);padding-top:1rem;margin-bottom:0.75rem;">
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--hint);margin-bottom:10px;">Entregas</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;display:flex;flex-direction:column;gap:6px;">
+          <div>· ICP de agência ideal e scoring de qualificação</div>
+          <div>· Fluxo de outreach e landing page do programa</div>
+          <div>· Presença em eventos e webinar de lançamento</div>
+        </div>
+      </div>
+      <div style="font-size:10.5px;font-weight:600;color:var(--navy);background:#E8ECF4;border-radius:100px;padding:4px 12px;display:inline-block;margin-top:1rem;">Maio → Junho 2026</div>
+    </div>
+
+  </div>
+
+  <!-- INSUMOS + TIMELINE -->
+  <div class="ins-grid">
+
+    <div class="ins-card anim-block">
+      <div class="ins-title">Insumos necessários</div>
+      <div class="ins-row">
+        <span class="ins-badge ib-hi">Crítico</span>
+        <span class="ins-text">Headcount — farmer dedicado para aceleração comercial dos parceiros</span>
+      </div>
+
+    </div>
+
+    <div class="tl-card anim-block">
+      <div class="tl-title">Timeline de execução</div>
+      <div class="tl-grid">
+        <div></div>
+        <div class="tl-month">Abr</div>
+        <div class="tl-month">Mai</div>
+        <div class="tl-month">Jun</div>
+        <div class="tl-month">Jul</div>
+        <div class="tl-month">Ago</div>
+        <div class="tl-month">Set</div>
+
+        <div class="tl-row-label" style="color:var(--teal)">Onboarding</div>
+        <div class="tl-bar" style="background:#CCE9EE"></div>
+        <div class="tl-bar" style="background:var(--teal)"></div>
+        <div class="tl-bar" style="background:var(--teal)"></div>
+        <div class="tl-bar" style="background:#CCE9EE"></div>
+        <div></div><div></div>
+
+        <div class="tl-row-label" style="color:var(--orange)">Farmer</div>
+        <div></div>
+        <div class="tl-bar" style="background:#FFE5DE"></div>
+        <div class="tl-bar" style="background:var(--orange)"></div>
+        <div class="tl-bar" style="background:var(--orange)"></div>
+        <div class="tl-bar" style="background:#FFE5DE"></div>
+        <div></div>
+
+        <div class="tl-row-label" style="color:var(--navy)">Growth</div>
+        <div></div><div></div>
+        <div class="tl-bar" style="background:#D0D8E4"></div>
+        <div class="tl-bar" style="background:var(--navy)"></div>
+        <div class="tl-bar" style="background:var(--navy)"></div>
+        <div class="tl-bar" style="background:var(--navy)"></div>
+      </div>
+      <div class="tl-legend">
+        <div class="tl-leg-item"><div class="tl-leg-dot" style="background:var(--teal)"></div>Onboarding</div>
+        <div class="tl-leg-item"><div class="tl-leg-dot" style="background:var(--orange)"></div>Farmer</div>
+        <div class="tl-leg-item"><div class="tl-leg-dot" style="background:var(--navy)"></div>Growth</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div><!-- /slides -->
+
+<!-- BOTTOM NAV -->
+<div class="bottomnav">
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="goToWithReveal(1)" id="tab-1">
+      <span class="tab-pill">1</span>Canal como alavanca de receita
+    </div>
+    <div class="nav-tab" onclick="goToWithReveal(2)" id="tab-2">
+      <span class="tab-pill">2</span>Status atual e projeção
+    </div>
+    <div class="nav-tab" onclick="goToWithReveal(3)" id="tab-3">
+      <span class="tab-pill">3</span>Próximos passos
+    </div>
+  </div>
+  <div class="nav-arrows">
+    <button class="nav-btn" id="btn-prev" onclick="prev()" disabled>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="nav-btn" id="btn-next" onclick="next()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+let cur = 1;
+const total = 3;
+
+/* ── ANIMATED NUMBER COUNTER ── */
+function animateCounter(el, target, duration, prefix, suffix) {
+  const start = performance.now();
+  const isFloat = target % 1 !== 0;
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+    const val = Math.round(ease * target);
+    el.textContent = prefix + val.toLocaleString('pt-BR') + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+    else el.textContent = prefix + target.toLocaleString('pt-BR') + suffix;
+  }
+  requestAnimationFrame(tick);
+}
+
+function runCounters(slideId) {
+  const targets = {
+    'slide-2': [
+      { sel: '.kpi-num.t', val: 11, pre: '', suf: '' },
+      { sel: '.kpi-num.g', val: 35, pre: '', suf: '' },
+    ]
+  };
+  if (!targets[slideId]) return;
+  const slide = document.getElementById(slideId);
+  targets[slideId].forEach(({ sel, val, pre, suf }) => {
+    const el = slide.querySelector(sel);
+    if (el) animateCounter(el, val, 900, pre, suf);
+  });
+}
+
+/* ── RE-TRIGGER ANIMATIONS ON SLIDE CHANGE ── */
+function replayAnimations(slideEl) {
+  const animated = slideEl.querySelectorAll('[style*="animation"], .stat-cell, .canal-card, .kpi-card, .tl-bar');
+  // Force reflow to restart CSS animations
+  slideEl.style.display = 'none';
+  void slideEl.offsetHeight;
+  slideEl.style.display = '';
+}
+
+/* ── SLIDE TRANSITION WITH DIRECTION ── */
+
+function goTo(n) {
+  const prevEl = document.getElementById('slide-' + cur);
+  prevEl.classList.remove('active');
+  prevEl.classList.add('out');
+  setTimeout(() => prevEl.classList.remove('out'), 400);
+  cur = n;
+  const nextEl = document.getElementById('slide-' + cur);
+  nextEl.classList.remove('active');
+  void nextEl.offsetHeight; // retrigger CSS animations
+  nextEl.classList.add('active');
+  document.getElementById('counter').textContent = String(cur).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+  for (let i = 1; i <= total; i++) {
+    document.getElementById('tab-' + i).classList.toggle('active', i === cur);
+  }
+  document.getElementById('btn-prev').disabled = cur === 1;
+  document.getElementById('btn-next').disabled = cur === total;
+  setTimeout(() => runCounters('slide-' + cur), 250);
+}
+
+function prev() { if (cur > 1) goToWithReveal(cur - 1); }
+function next() { if (cur < total) goToWithReveal(cur + 1); }
+
+/* ── STAGGER REVEAL ── */
+function revealSlide(slideId) {
+  const slide = document.getElementById(slideId);
+  if (!slide) return;
+  const els = slide.querySelectorAll('.anim-block, .anim-pop, .anim-num');
+  els.forEach(el => el.classList.remove('revealed'));
+  els.forEach((el, i) => {
+    setTimeout(() => el.classList.add('revealed'), 80 + i * 55);
+  });
+}
+
+function goToWithReveal(n) {
+  goTo(n);
+  setTimeout(() => revealSlide('slide-' + n), 120);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prev();
+});
+
+// Initial reveal on slide 1
+setTimeout(() => revealSlide('slide-1'), 250);
+
+/* ── SPOTLIGHT EFFECT ON FRENTE CARDS ── */
+document.querySelectorAll('.frente-col').forEach(card => {
+  const spotlight = card.querySelector('.spotlight');
+  const color = card.dataset.bg || 'rgba(0,145,174,0.06)';
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    spotlight.style.background = `radial-gradient(320px circle at ${e.clientX-rect.left}px ${e.clientY-rect.top}px, ${color}, transparent 70%)`;
+  });
+  card.addEventListener('mouseleave', () => { spotlight.style.background = 'transparent'; });
+});
+</script>
+</body>
+</html>
