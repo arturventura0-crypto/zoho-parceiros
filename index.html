@@ -5,1326 +5,532 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zoho · Canal de Agências Parceiras</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Lexend+Deca:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-
-/* ── RESET ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-/* ── TOKENS ── */
-:root {
-  --orange:  #FF7A59;
-  --navy:    #2D3E50;
-  --teal:    #0091AE;
-  --green:   #00A4BD;
-  --bg:      #F5F0EB;
-  --surface: #FFFFFF;
-  --border:  #E8E0D8;
-  --text:    #2D3E50;
-  --muted:   #516F90;
-  --hint:    #99ACC2;
-  --serif:   'Playfair Display', Georgia, serif;
-  --sans:    'Lexend Deca', system-ui, sans-serif;
-}
-
-/* ── BASE ── */
-html, body { height: 100%; overflow: hidden; font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.5; }
-
-/* ── SHELL ── */
-.shell { display: grid; grid-template-rows: 44px 1fr 60px; height: 100vh; }
-
-/* ── TOPBAR ── */
-.topbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2.5rem;
-  flex-shrink: 0;
-}
-.tl { display: flex; align-items: center; gap: 12px; }
-.t-dots { display: flex; gap: 3px; }
-.t-dot { width: 8px; height: 8px; border-radius: 2px; }
-.t-brand { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--navy); letter-spacing: 0.06em; }
-.t-sep { color: var(--border); font-size: 18px; font-weight: 300; }
-.t-sub { font-size: 12px; color: var(--hint); font-weight: 400; }
-.t-counter {
-  font-size: 11px; color: var(--hint); letter-spacing: 0.1em;
-  background: var(--bg); border-radius: 100px;
-  padding: 3px 12px; font-weight: 400;
-}
-
-/* ── SLIDES ── */
-.slides { position: relative; overflow: hidden; }
-.slide {
-  position: absolute; inset: 0;
-  overflow-y: auto; overflow-x: hidden;
-  padding: 2.5rem 3rem 2rem;
-  opacity: 0; transform: translateX(32px);
-  pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
-.slide.out    { opacity: 0; transform: translateX(-32px); }
-
-/* ── BOTTOM NAV ── */
-.bottomnav {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2.5rem;
-  flex-shrink: 0;
-}
-.nav-tabs { display: flex; }
-.nav-tab {
-  height: 60px; padding: 0 1.4rem;
-  display: flex; align-items: center; gap: 8px;
-  font-size: 12px; font-weight: 400; color: var(--hint);
-  border-bottom: 3px solid transparent;
-  cursor: pointer; transition: all 0.2s; white-space: nowrap;
-}
-.nav-tab:hover { color: var(--navy); }
-.nav-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
-.tab-pill {
-  width: 20px; height: 20px; border-radius: 50%;
-  background: var(--border); color: var(--hint);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 600; transition: all 0.2s;
-}
-.nav-tab.active .tab-pill { background: var(--orange); color: white; }
-.nav-arrows { display: flex; gap: 8px; }
-.nav-btn {
-  width: 34px; height: 34px; border-radius: 8px;
-  border: 1px solid var(--border); background: var(--surface);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  color: var(--navy); transition: all 0.2s;
-}
-.nav-btn:hover:not(:disabled) { background: var(--navy); color: white; border-color: var(--navy); }
-.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-/* ── SHARED TYPOGRAPHY ── */
-.eyebrow {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--orange);
-  margin-bottom: 10px;
-  display: flex; align-items: center; gap: 8px;
-}
-.eyebrow::before {
-  content: ''; width: 20px; height: 2px;
-  background: var(--orange); border-radius: 2px; flex-shrink: 0;
-}
-.slide-h1 {
-  font-family: var(--serif);
-  font-size: clamp(30px, 3.5vw, 44px);
-  font-weight: 800; line-height: 1.1;
-  color: var(--navy); letter-spacing: -0.025em;
-  margin-bottom: 1rem;
-}
-.slide-h1 em { font-style: italic; color: var(--orange); }
-.slide-p {
-  font-size: 15px; font-weight: 300; color: var(--muted);
-  line-height: 1.7; max-width: 540px; margin-bottom: 2rem;
-}
-
-/* ── CARD BASE ── */
-.card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 1.4rem;
-}
-
-/* ── SECTION LABEL ── */
-.sec-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--hint);
-  margin-bottom: 1rem;
-}
-
-/* ════════════════════════
-   SLIDE 1
-════════════════════════ */
-
-/* Stat strip */
-.stat-strip {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; overflow: hidden;
-  margin-bottom: 2rem;
-}
-.stat-cell {
-  padding: 1.25rem 1.5rem;
-  border-right: 1px solid var(--border);
-}
-.stat-cell:last-child { border-right: none; }
-.stat-num {
-  font-family: var(--serif);
-  font-size: 38px; font-weight: 800; line-height: 1;
-  display: block; margin-bottom: 4px;
-}
-.stat-num.orange { color: var(--orange); }
-.stat-num.teal   { color: var(--teal); }
-.stat-num.green  { color: var(--green); }
-.stat-lbl {
-  font-size: 11px; color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.1em; font-weight: 400;
-}
-
-/* Feature rows — HubSpot style: icon left, text right, divider between */
-.feature-section { margin-bottom: 2rem; }
-.feature-section-title {
-  font-family: var(--serif);
-  font-size: 20px; font-weight: 700; color: var(--navy);
-  margin-bottom: 1.5rem;
-}
-.feature-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-.feature-item {
-  background: var(--surface);
-  border: 1px solid var(--border); border-radius: 12px;
-  padding: 1.5rem 1.4rem;
-  display: flex; flex-direction: column; gap: 10px;
-  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s ease;
-  will-change: transform;
-}
-.fi-icon {
-  width: 44px; height: 44px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.fi-title { font-size: 15px; font-weight: 700; color: var(--navy); font-family: var(--serif); line-height: 1.3; }
-.fi-desc  { font-size: 12.5px; color: var(--muted); font-weight: 300; line-height: 1.6; }
-
-/* Canal cards */
-.canal-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 1rem; margin-bottom: 0;
-}
-.canal-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 1.4rem;
-  position: relative; overflow: hidden;
-  display: flex; flex-direction: column; gap: 10px;
-}
-.canal-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0;
-  height: 3px; border-radius: 12px 12px 0 0;
-}
-.canal-card.c1::before { background: var(--teal); }
-.canal-card.c2::before { background: var(--orange); }
-.canal-card.c3::before { background: var(--green); }
-.canal-card.c2 { }
-.canal-eyebrow {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.canal-eyebrow.t { color: var(--teal); }
-.canal-eyebrow.o { color: var(--orange); }
-.canal-eyebrow.g { color: var(--green); }
-.canal-title {
-  font-family: var(--serif); font-size: 16px; font-weight: 700;
-  color: var(--navy); line-height: 1.3;
-}
-.canal-card.c2 .canal-title { color: var(--navy); }
-.canal-desc { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.6; }
-.canal-card.c2 .canal-desc { color: var(--muted); }
-.canal-icon {
-  width: 42px; height: 42px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* Source note */
-.source-note {
-  font-size: 10.5px; color: var(--hint); font-weight: 300;
-  font-style: italic; margin-top: 1rem;
-}
-
-/* ════════════════════════
-   SLIDE 2
-════════════════════════ */
-
-.kpi-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 1rem; margin-bottom: 1.75rem;
-}
-.kpi-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 1.1rem 1.3rem;
-  position: relative; overflow: hidden;
-}
-.kpi-card::after {
-  content: ''; position: absolute;
-  top: 0; left: 0; right: 0; height: 3px;
-  border-radius: 12px 12px 0 0;
-}
-.kpi-card.k1::after { background: var(--teal); }
-.kpi-card.k2::after { background: var(--green); }
-.kpi-card.k3::after { background: var(--orange); }
-.kpi-card.k4::after { background: var(--navy); }
-.kpi-num {
-  font-family: var(--serif); font-size: 34px; font-weight: 800;
-  display: block; line-height: 1; margin-bottom: 4px;
-}
-.kpi-num.t { color: var(--teal); }
-.kpi-num.g { color: var(--green); }
-.kpi-num.o { color: var(--orange); }
-.kpi-num.n { color: var(--navy); }
-.kpi-lbl { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 400; }
-.kpi-sub { font-size: 11px; color: var(--hint); margin-top: 5px; font-weight: 300; }
-
-.mid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; align-items: stretch; }
-
-/* Table */
-.t-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
-.t-head { padding: 0.9rem 1.2rem; border-bottom: 1px solid var(--border); font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); flex-shrink: 0; }
-.t-body { overflow-y: auto; flex: 1; }
-.t-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 1rem; padding: 0.6rem 1.2rem; border-bottom: 1px solid var(--border); font-size: 12.5px; }
-.t-row:last-child { border-bottom: none; }
-.t-name { color: var(--navy); }
-.t-badge { font-size: 10px; font-weight: 500; padding: 2px 9px; border-radius: 100px; white-space: nowrap; }
-.tb-a { background: #E5F7F0; color: #007A5C; }
-.tb-o { background: #FFF1ED; color: var(--orange); }
-.tb-p { background: #E5F5F8; color: var(--teal); }
-.t-val { font-size: 12px; color: var(--muted); }
-
-/* Bar chart */
-.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
-.chart-title { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
-.bar-chart { display: flex; align-items: flex-end; gap: 12px; height: 110px; margin-bottom: 8px; }
-.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.bar-wrap { width: 100%; display: flex; align-items: flex-end; height: 90px; }
-.bar { width: 100%; border-radius: 6px 6px 0 0; position: relative; }
-.bar-val { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; white-space: nowrap; }
-.bar-lbl { font-size: 10px; color: var(--hint); text-align: center; }
-
-/* Scenario strip */
-.sc-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.sc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.3rem; }
-.sc.featured { background: var(--navy); border-color: var(--navy); }
-.sc-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
-.sc-label.t { color: var(--teal); }
-.sc-label.o { color: var(--orange); }
-.sc-label.w { color: rgba(255,255,255,0.4); }
-.sc-val { font-family: var(--serif); font-size: 24px; font-weight: 800; margin-bottom: 4px; }
-.sc-val.n { color: var(--navy); }
-.sc-val.w { color: white; }
-.sc-desc { font-size: 11.5px; color: var(--muted); font-weight: 300; line-height: 1.45; }
-.sc-desc.w { color: rgba(255,255,255,0.45); }
-
-/* ════════════════════════
-   SLIDE 3
-════════════════════════ */
-
-.s3-header { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 2rem; margin-bottom: 1.75rem; }
-.deadline {
-  background: var(--navy); border-radius: 10px; padding: 1rem 1.4rem; text-align: center; white-space: nowrap;
-}
-.deadline-lbl { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; }
-.deadline-val { font-family: var(--serif); font-size: 20px; font-weight: 700; color: white; }
-
-.rm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-.rm-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
-.rm-top { padding: 1.2rem 1.3rem 1rem; border-bottom: 1px solid var(--border); flex: 1; }
-.rm-bot { padding: 1rem 1.3rem; background: #FAF6F2; }
-.rm-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-.rm-tag-dot { width: 6px; height: 6px; border-radius: 50%; }
-.rt-t { color: var(--teal); } .rt-t .rm-tag-dot { background: var(--teal); }
-.rt-g { color: var(--green); } .rt-g .rm-tag-dot { background: var(--green); }
-.rt-o { color: var(--orange); } .rt-o .rm-tag-dot { background: var(--orange); }
-.rm-title { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 7px; line-height: 1.3; }
-.rm-desc { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.55; }
-.rm-steps-lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hint); margin-bottom: 8px; }
-.rm-step { display: flex; align-items: flex-start; gap: 7px; font-size: 11.5px; color: var(--muted); margin-bottom: 5px; line-height: 1.35; }
-.rm-step:last-of-type { margin-bottom: 10px; }
-.rm-step-dot { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-.rm-dl { font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 100px; display: inline-block; }
-.rm-dl.t { background: #E5F5F8; color: var(--teal); }
-.rm-dl.g { background: #E5F7F2; color: var(--green); }
-.rm-dl.o { background: #FFF1ED; color: var(--orange); }
-
-.ins-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.ins-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
-.ins-title { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
-.ins-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
-.ins-row:last-child { border-bottom: none; padding-bottom: 0; }
-.ins-badge { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
-.ib-hi  { background: #FFF1ED; color: #C0392B; }
-.ib-med { background: #E5F5F8; color: var(--teal); }
-.ins-text { color: var(--muted); font-weight: 300; line-height: 1.45; }
-
-.tl-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
-.tl-title { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
-.tl-grid { display: grid; grid-template-columns: 72px repeat(6, 1fr); gap: 4px; align-items: center; }
-.tl-month { text-align: center; font-size: 9px; color: var(--hint); text-transform: uppercase; letter-spacing: 0.08em; }
-.tl-row-label { font-size: 10px; font-weight: 500; }
-.tl-bar { height: 22px; border-radius: 4px; }
-.tl-legend { display: flex; gap: 1rem; margin-top: 10px; flex-wrap: wrap; }
-.tl-leg-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
-.tl-leg-dot { width: 10px; height: 7px; border-radius: 2px; }
-
-/* ── ANIMATIONS ── */
-
-/* Fade + slide up for slide children */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes growX {
-  from { transform: scaleX(0); transform-origin: left; }
-  to   { transform: scaleX(1); transform-origin: left; }
-}
-
-/* Slide children stagger */
-.slide.active .eyebrow        { animation: fadeUp 0.5s ease both; animation-delay: 0.05s; }
-.slide.active .slide-h1       { animation: fadeUp 0.5s ease both; animation-delay: 0.12s; }
-.slide.active .slide-p        { animation: fadeUp 0.5s ease both; animation-delay: 0.18s; }
-.slide.active .stat-strip     { animation: fadeUp 0.5s ease both; animation-delay: 0.22s; }
-.slide.active .source-note    { animation: fadeUp 0.4s ease both; animation-delay: 0.26s; }
-.slide.active .feature-section{ animation: fadeUp 0.5s ease both; animation-delay: 0.28s; }
-.slide.active .sec-label      { animation: fadeUp 0.4s ease both; animation-delay: 0.32s; }
-.slide.active .canal-grid     { animation: fadeUp 0.5s ease both; animation-delay: 0.36s; }
-.slide.active .kpi-grid       { animation: fadeUp 0.5s ease both; animation-delay: 0.20s; }
-.slide.active .mid-grid       { animation: fadeUp 0.5s ease both; animation-delay: 0.30s; }
-.slide.active .sc-strip       { animation: fadeUp 0.5s ease both; animation-delay: 0.40s; }
-.slide.active .s3-header      { animation: fadeUp 0.4s ease both; animation-delay: 0.10s; }
-.slide.active .ins-grid       { animation: fadeUp 0.5s ease both; animation-delay: 0.45s; }
-
-/* Timeline bars grow */
-.slide.active .tl-bar {
-  animation: growX 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-.slide.active .tl-grid > *:nth-child(2)  .tl-bar,
-.slide.active .tl-bar:nth-child(2)  { animation-delay: 0.4s; }
-.slide.active .tl-bar:nth-child(3)  { animation-delay: 0.5s; }
-.slide.active .tl-bar:nth-child(4)  { animation-delay: 0.6s; }
-.slide.active .tl-bar:nth-child(5)  { animation-delay: 0.7s; }
-.slide.active .tl-bar:nth-child(6)  { animation-delay: 0.8s; }
-
-/* Hover lift on cards */
-.canal-card, .ins-card, .tl-card, .kpi-card, .chart-card, .t-card {
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
-}
-.canal-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 32px rgba(45,62,80,0.10);
-}
-.kpi-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(45,62,80,0.09);
-}
-.ins-card:hover, .tl-card:hover, .chart-card:hover, .t-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(45,62,80,0.08);
-}
-
-/* Stat strip cells pulse on enter */
-@keyframes statPop {
-  0%   { transform: scale(0.92); opacity: 0; }
-  60%  { transform: scale(1.03); opacity: 1; }
-  100% { transform: scale(1); }
-}
-.slide.active .stat-cell:nth-child(1) { animation: statPop 0.5s ease both; animation-delay: 0.3s; }
-.slide.active .stat-cell:nth-child(2) { animation: statPop 0.5s ease both; animation-delay: 0.4s; }
-.slide.active .stat-cell:nth-child(3) { animation: statPop 0.5s ease both; animation-delay: 0.5s; }
-
-/* Roadmap frente columns stagger */
-.slide.active .rm-cols > div:nth-child(1) { animation: fadeUp 0.5s ease both; animation-delay: 0.25s; }
-.slide.active .rm-cols > div:nth-child(2) { animation: fadeUp 0.5s ease both; animation-delay: 0.35s; }
-.slide.active .rm-cols > div:nth-child(3) { animation: fadeUp 0.5s ease both; animation-delay: 0.45s; }
-
-/* Smooth nav tab indicator */
-.nav-tab { transition: color 0.2s ease, border-color 0.2s ease; }
-.tab-pill { transition: background 0.2s ease, color 0.2s ease; }
-
-/* Topbar dot hover */
-.t-dot {
-  transition: transform 0.2s ease;
-}
-.t-dot:hover { transform: scale(1.4); }
-
-
-/* ════════════════════════
-   ANIMATIONS
-════════════════════════ */
-
-/* Keyframes */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.94); }
-  to   { opacity: 1; transform: scale(1); }
-}
-@keyframes slideRight {
-  from { opacity: 0; transform: translateX(-20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes barGrow {
-  from { transform: scaleY(0); transform-origin: bottom; }
-  to   { transform: scaleY(1); transform-origin: bottom; }
-}
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes pulseOrb {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255,122,89,0.15); }
-  50%       { box-shadow: 0 0 0 8px rgba(255,122,89,0); }
-}
-
-/* Slide entry — stagger children */
-.slide.active .eyebrow     { animation: slideRight 0.5s ease both; animation-delay: 0.05s; }
-.slide.active .slide-h1    { animation: fadeUp 0.55s ease both; animation-delay: 0.12s; }
-.slide.active .slide-p     { animation: fadeUp 0.55s ease both; animation-delay: 0.18s; }
-
-/* Stat strip */
-.slide.active .stat-strip  { animation: fadeUp 0.55s ease both; animation-delay: 0.22s; }
-.slide.active .source-note { animation: fadeIn 0.5s ease both; animation-delay: 0.35s; }
-
-/* Feature grid items — stagger */
-.slide.active .feature-item:nth-child(1) { animation: fadeUp 0.5s ease both; animation-delay: 0.28s; }
-.slide.active .feature-item:nth-child(2) { animation: fadeUp 0.5s ease both; animation-delay: 0.38s; }
-.slide.active .feature-item:nth-child(3) { animation: fadeUp 0.5s ease both; animation-delay: 0.48s; }
-
-/* Canal cards */
-.slide.active .canal-card.c1 { animation: scaleIn 0.5s ease both; animation-delay: 0.32s; }
-.slide.active .canal-card.c2 { animation: scaleIn 0.5s ease both; animation-delay: 0.42s; }
-.slide.active .canal-card.c3 { animation: scaleIn 0.5s ease both; animation-delay: 0.52s; }
-
-/* Slide 2 KPI cards */
-.slide.active .kpi-card.k1 { animation: fadeUp 0.45s ease both; animation-delay: 0.22s; }
-.slide.active .kpi-card.k2 { animation: fadeUp 0.45s ease both; animation-delay: 0.30s; }
-.slide.active .kpi-card.k3 { animation: fadeUp 0.45s ease both; animation-delay: 0.38s; }
-.slide.active .kpi-card.k4 { animation: fadeUp 0.45s ease both; animation-delay: 0.46s; }
-.slide.active .mid-grid    { animation: fadeUp 0.5s ease both; animation-delay: 0.52s; }
-.slide.active .sc-strip    { animation: fadeUp 0.5s ease both; animation-delay: 0.60s; }
-
-/* Slide 3 frentes & insumos */
-.slide.active .s3-header   { animation: fadeUp 0.5s ease both; animation-delay: 0.18s; }
-.slide.active .ins-grid    { animation: fadeUp 0.5s ease both; animation-delay: 0.55s; }
-
-/* Deadline badge pulse */
-.slide.active .deadline { animation: scaleIn 0.5s ease both, pulseOrb 2s ease 0.8s 2; animation-delay: 0.25s; }
-
-/* Hover effects */
-.kpi-card   { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-.kpi-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(45,62,80,0.10); }
-
-.canal-card { transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s ease; will-change: transform; }
-.canal-card:not(.c2):hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(45,62,80,0.10); }
-.canal-card.c2:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(45,62,80,0.10); }
-
-
-.ins-card  { transition: box-shadow 0.2s ease; }
-.ins-card:hover  { box-shadow: 0 4px 16px rgba(45,62,80,0.08); }
-
-.tl-card  { transition: box-shadow 0.2s ease; }
-.tl-card:hover  { box-shadow: 0 4px 16px rgba(45,62,80,0.08); }
-
-/* Nav tab hover underline slide */
-.nav-tab { position: relative; }
-.nav-tab::after {
-  content: '';
-  position: absolute; bottom: 0; left: 50%; right: 50%;
-  height: 3px; background: var(--orange);
-  transition: left 0.25s ease, right 0.25s ease;
-  border-radius: 2px 2px 0 0;
-}
-.nav-tab.active::after { left: 0; right: 0; }
-
-/* Topbar counter pill pulse on change */
-.t-counter.changed { animation: scaleIn 0.3s ease; }
-
-/* ── BLOCK REVEAL ANIMATIONS ── */
-@keyframes revealUp {
-  from { opacity: 0; transform: translateY(32px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes revealLeft {
-  from { opacity: 0; transform: translateX(-24px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes shimmer {
-  0%   { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-@keyframes numberPop {
-  0%   { transform: scale(0.7); opacity: 0; }
-  60%  { transform: scale(1.08); opacity: 1; }
-  100% { transform: scale(1); }
-}
-@keyframes borderDraw {
-  from { clip-path: inset(0 100% 0 0); }
-  to   { clip-path: inset(0 0% 0 0); }
-}
-
-/* Elements start invisible, animate in when .revealed is added */
-. {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1),
-              transform 0.6s cubic-bezier(0.22,1,0.36,1);
-}
-..revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Stagger delays for siblings */
-.:nth-child(2) { transition-delay: 0.08s; }
-.:nth-child(3) { transition-delay: 0.16s; }
-.:nth-child(4) { transition-delay: 0.24s; }
-
-. {
-  opacity: 0;
-  transform: scale(0.88);
-  transition: opacity 0.5s cubic-bezier(0.34,1.56,0.64,1),
-              transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
-}
-..revealed {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Stat numbers pop */
-.stat-num { display: block; }
-.stat-num. {
-  opacity: 0;
-  transform: scale(0.75) translateY(8px);
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.4,0.64,1);
-}
-.stat-num..revealed {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
-
-/* Shimmer loading bar on kpi accent */
-.kpi-card::after {
-  transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
-}
-
-/* Feature items slide from left */
-
-/* Canal cards spring in */
-.canal-card.:nth-child(1) { transition-delay: 0.0s; }
-.canal-card.:nth-child(2) { transition-delay: 0.12s; }
-.canal-card.:nth-child(3) { transition-delay: 0.24s; }
-
-/* ── FRENTE CARDS SPOTLIGHT HOVER ── */
-@keyframes flipIn {
-  from { opacity: 0; transform: perspective(600px) rotateX(18deg) translateY(30px); }
-  to   { opacity: 1; transform: perspective(600px) rotateX(0deg) translateY(0); }
-}
-
-.frente-col {
-  position: relative;
-  cursor: default;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  overflow: hidden;
-}
-
-.frente-col:hover {
-  transform: translateY(-2px);
-  z-index: 2;
-}
-
-/* Spotlight overlay — color injected via JS */
-.frente-col .spotlight {
-  position: absolute;
-  inset: 0;
-  border-radius: 14px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 0;
-}
-
-.frente-col:hover .spotlight {
-  opacity: 1;
-}
-
-/* All frente content above spotlight */
-.frente-col > *:not(.spotlight) {
-  position: relative;
-  z-index: 1;
-}
-
-/* Animate frente cols on slide entry */
-.slide.active .frente-col:nth-child(1) { animation: flipIn 0.6s cubic-bezier(0.22,1,0.36,1) both; animation-delay: 0.2s; }
-.slide.active .frente-col:nth-child(2) { animation: flipIn 0.6s cubic-bezier(0.22,1,0.36,1) both; animation-delay: 0.32s; }
-.slide.active .frente-col:nth-child(3) { animation: flipIn 0.6s cubic-bezier(0.22,1,0.36,1) both; animation-delay: 0.44s; }
-
-/* Highlight bar draw animation on top border */
-.kpi-card.revealed::after {
-  animation: borderDraw 0.6s ease both;
-}
-
+:root{
+  --red:#E8503A;--orange:#F5A623;--green:#5BBE6E;--blue:#226DB4;
+  --teal:#0B9BAF;--ink:#0A1628;--ink2:#1A2E42;
+  --bg:#ECEEF2;--card:#FFFFFF;--border:#D8DDE8;
+  --muted:#4E5F72;--hint:#8C9BAD;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --r20:20px;--r16:16px;--r12:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#B8C2CE;border-radius:2px}
+
+/* ─── NAV ─── */
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(24px);border-bottom:1px solid rgba(216,221,232,.7);padding:0 3rem;height:54px;display:flex;align-items:center;justify-content:space-between}
+.nav-l{display:flex;align-items:center;gap:12px}
+.dots{display:flex;gap:3px}
+.dot{width:8px;height:8px;border-radius:2px;transition:transform .2s}
+.dot:hover{transform:scale(1.5)}
+.brand{font-size:17px;font-weight:700;letter-spacing:.06em;color:var(--ink)}
+.pipe{width:1px;height:18px;background:var(--border)}
+.sub{font-size:11px;color:var(--hint);font-weight:500}
+.tag{font-size:10px;font-weight:600;color:var(--hint);background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:3px 12px;letter-spacing:.05em}
+
+/* ─── WRAP ─── */
+.page{max-width:1100px;margin:0 auto;padding:0 3rem 8rem}
+
+/* ─── UTILS ─── */
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+.eyebrow::before{content:'';width:20px;height:2px;background:var(--red);border-radius:2px}
+h1.display{font-family:var(--serif);font-size:clamp(36px,4.2vw,58px);font-weight:400;line-height:1.06;letter-spacing:-.02em;margin-bottom:1.2rem}
+h2.display{font-family:var(--serif);font-size:clamp(28px,3.2vw,44px);font-weight:400;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem}
+h1.display em,h2.display em{font-style:italic;color:var(--red)}
+.lead{font-size:14.5px;font-weight:300;color:var(--muted);line-height:1.85;max-width:540px;margin-bottom:2.5rem}
+.callout{font-weight:700;color:var(--red)}
+.clbl{font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--hint);margin-bottom:.9rem}
+.hr{border:none;height:1px;background:linear-gradient(90deg,var(--border),transparent 75%);margin:5.5rem 0 0}
+.src{font-size:10px;color:var(--hint);font-style:italic;margin-top:.7rem}
+
+/* ═══════════════════════════════════════════
+   CAMADA 1: BENCHMARK
+   Layout assimétrico — número enorme à esq,
+   texto à dir, linha acc no topo
+═══════════════════════════════════════════ */
+.bench{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1px;
+  background:var(--border);
+  border-radius:var(--r20);
+  overflow:hidden;
+  margin-bottom:.75rem;
+}
+.bc{
+  background:var(--card);
+  padding:2rem 2rem 1.75rem;
+  position:relative;
+  transition:background .18s;
+}
+.bc:hover{background:#FAFBFD}
+.bc-accent{position:absolute;top:0;left:0;right:0;height:3px}
+.bc-num{
+  font-family:var(--serif);
+  font-size:clamp(48px,5.5vw,72px);
+  font-weight:400;line-height:.95;
+  letter-spacing:-.02em;
+  display:block;margin-bottom:12px;
+}
+.bc-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:600;line-height:1.5}
+
+/* ═══════════════════════════════════════════
+   RD STATION — design novo
+   Dois painéis brancos limpos lado a lado
+   Esq: stat gigante + linha divisória interna
+   Dir: tiers como linha horizontal de pills
+═══════════════════════════════════════════ */
+.rd-wrap{
+  margin-top:2.5rem;
+  display:grid;
+  grid-template-rows:auto auto;
+  gap:.75rem;
+}
+
+/* Faixa de números horizontais — clean */
+.rd-numbers{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1px;
+  background:var(--border);
+  border-radius:var(--r20);
+  overflow:hidden;
+}
+.rd-num-cell{
+  background:var(--card);
+  padding:1.75rem 2rem;
+  display:flex;
+  align-items:center;
+  gap:1.5rem;
+  position:relative;
+  overflow:hidden;
+}
+.rd-num-cell.featured{
+  background:var(--ink);
+  grid-column:span 1;
+}
+/* Decoração geométrica sutil */
+.rd-num-cell.featured::after{
+  content:'';
+  position:absolute;
+  right:-30px;top:-30px;
+  width:140px;height:140px;
+  border-radius:50%;
+  border:40px solid rgba(255,255,255,.04);
+  pointer-events:none;
+}
+.rdn-value{
+  font-family:var(--serif);
+  font-size:clamp(52px,6vw,80px);
+  font-weight:400;
+  line-height:.9;
+  letter-spacing:-.03em;
+  flex-shrink:0;
+}
+.rdn-side{}
+.rdn-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;line-height:1.5;margin-bottom:6px}
+.rdn-note{font-size:11.5px;font-weight:300;line-height:1.65;max-width:280px}
+
+/* Tiers como strip de 5 cards iguais */
+.tiers-strip{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:.75rem;
+}
+.tc{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r16);
+  padding:1.1rem 1.2rem;
+  position:relative;overflow:hidden;
+  transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s;
+  display:flex;flex-direction:column;gap:8px;
+}
+.tc:hover{transform:translateY(-5px);box-shadow:0 14px 40px rgba(10,22,40,.12)}
+.tc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.tc:nth-child(1)::before{background:linear-gradient(90deg,#1A5EA8,#6AAEE0)}
+.tc:nth-child(2)::before{background:linear-gradient(90deg,#5236A0,#9070D8)}
+.tc:nth-child(3)::before{background:linear-gradient(90deg,#8A5200,#D4A040)}
+.tc:nth-child(4)::before{background:linear-gradient(90deg,#5A5460,#9290A0)}
+.tc:nth-child(5)::before{background:linear-gradient(90deg,#2A6E3F,#58B874)}
+.tc-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;align-self:flex-start;letter-spacing:.03em}
+.tbd{background:#EBF4FF;color:#1A5EA8}.tbp{background:#F0ECF8;color:#5236A0}
+.tbg{background:#FEF3DC;color:#8A5200}.tbs{background:#F1EFF0;color:#5A5460}
+.tbm{background:#E8F5EC;color:#2A6E3F}
+.tc-count{font-family:var(--serif);font-size:32px;font-weight:400;line-height:1;color:var(--ink);letter-spacing:-.02em}
+.tc-mrr-lbl{font-size:9px;color:var(--hint);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.tc-mrr-val{font-size:12px;font-weight:500;color:var(--muted)}
+
+/* ═══════════════════════════════════════════
+   CAMADA 2
+═══════════════════════════════════════════ */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:460px;margin-bottom:1.5rem}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--r16);padding:1.4rem 1.6rem;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.kpi:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(10,22,40,.1)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.k1::before{background:linear-gradient(90deg,var(--teal),#3DD0E0)}
+.k2::before{background:linear-gradient(90deg,var(--blue),#4A8DD4)}
+.kpi-n{font-family:var(--serif);font-size:44px;font-weight:400;line-height:1;margin-bottom:4px;letter-spacing:-.02em}
+.kpi-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:600}
+.kpi-s{font-size:10px;color:var(--hint);margin-top:3px}
+
+.gapbox{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:0 var(--r16) var(--r16) 0;padding:1.3rem 1.6rem;font-size:13px;color:var(--muted);line-height:1.85}
+.gapbox strong{color:var(--ink);font-weight:700}
+
+/* ═══════════════════════════════════════════
+   CAMADA 3
+═══════════════════════════════════════════ */
+.flow{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr;align-items:center;margin-bottom:2.5rem}
+.fb{border-radius:var(--r16);padding:1.3rem 1rem;text-align:center;border:1px solid var(--border);background:var(--card);transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s}
+.fb:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(10,22,40,.11)}
+.fbt{background:#E3F5F8;border-color:#A0D8E2}
+.fbg{background:#F4F5F7;border-color:var(--border)}
+.fbb{background:#E8F0FB;border-color:#AECAE8}
+.fbn{background:var(--ink);border-color:var(--ink)}
+.fa{text-align:center;color:var(--hint);font-size:14px}
+.ft{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.fbt .ft{color:#0A6878}.fbg .ft{color:var(--muted)}.fbb .ft{color:#1A5EA8}.fbn .ft{color:rgba(255,255,255,.38)}
+.fn{font-family:var(--serif);font-size:30px;font-weight:400;line-height:1;margin-bottom:4px;letter-spacing:-.02em}
+.fbt .fn{color:#0B9BAF}.fbg .fn{color:var(--ink)}.fbb .fn{color:var(--blue)}.fbn .fn{color:white}
+.fs{font-size:10px;line-height:1.5}
+.fbt .fs{color:#2A9AAD}.fbg .fs{color:var(--hint)}.fbb .fs{color:#4A80BD}.fbn .fs{color:rgba(255,255,255,.5)}
+.fno{font-size:9px;margin-top:5px;font-style:italic}
+.fbt .fno,.fbg .fno{color:var(--hint)}
+
+.proj{display:grid;grid-template-columns:1.1fr 1fr;gap:1.25rem}
+.ccrd{background:var(--card);border:1px solid var(--border);border-radius:var(--r20);padding:1.6rem}
+.ct{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.cs{font-size:10px;color:var(--hint);margin-bottom:1.2rem;font-weight:500}
+.cleg{display:flex;gap:1.5rem;margin-top:10px}
+.cli{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);font-weight:500}
+.cll{width:16px;height:2.5px;border-radius:2px;flex-shrink:0}
+
+.rresults{display:flex;flex-direction:column;gap:9px}
+.rlbl{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--hint);margin-bottom:.5rem}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:var(--r12);padding:1rem 1.25rem;transition:transform .2s,box-shadow .2s}
+.rc:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,22,40,.09)}
+.rc.feat{background:var(--ink);border-color:var(--ink)}
+.rsl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px}
+.rv{font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:3px;line-height:1.1;letter-spacing:-.01em}
+.rd{font-size:11px;line-height:1.55}
+
+.ins{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.75rem}
+.in{background:var(--card);border:1px solid var(--border);border-radius:0 var(--r12) var(--r12) 0;padding:1.2rem 1.5rem;font-size:12.5px;color:var(--muted);line-height:1.7}
+.in-t{font-size:12px;font-weight:700;margin-bottom:5px}
+
+/* PRÓXIMOS PASSOS */
+.pstop{display:grid;grid-template-columns:1fr auto;align-items:start;gap:2rem;margin-bottom:2rem}
+.dlb{background:var(--ink);border-radius:var(--r12);padding:.9rem 1.5rem;text-align:center;white-space:nowrap;flex-shrink:0}
+.dll{font-size:9px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.14em;font-weight:700;margin-bottom:3px}
+.dlv{font-family:var(--serif);font-size:20px;font-weight:400;color:white;letter-spacing:-.01em}
+
+.frentes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-bottom:1.25rem}
+.frente{background:var(--card);border:1px solid var(--border);border-radius:var(--r20);padding:1.5rem;display:flex;flex-direction:column;gap:9px;position:relative;overflow:hidden;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s}
+.frente:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(10,22,40,.12)}
+.frente::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.fr1::before{background:linear-gradient(90deg,var(--teal),#3DD0E0)}
+.fr2{background:var(--ink)}.fr2::before{background:linear-gradient(90deg,var(--red),#FF7A5A)}
+.fr3::before{background:linear-gradient(90deg,var(--ink2),#4A6A8A)}
+.ftag{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.ftag::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.fr1 .ftag{color:var(--teal)}.fr1 .ftag::before{background:var(--teal)}
+.fr2 .ftag{color:var(--red)}.fr2 .ftag::before{background:var(--red)}
+.fr3 .ftag{color:var(--muted)}.fr3 .ftag::before{background:var(--muted)}
+.ftitle2{font-family:var(--serif);font-size:16px;font-weight:400;line-height:1.3;letter-spacing:-.01em}
+.fr1 .ftitle2,.fr3 .ftitle2{color:var(--ink)}.fr2 .ftitle2{color:white}
+.fdesc{font-size:11px;line-height:1.65}
+.fr1 .fdesc,.fr3 .fdesc{color:var(--muted)}.fr2 .fdesc{color:rgba(255,255,255,.5)}
+.fhr{border:none;border-top:1px solid}
+.fr1 .fhr,.fr3 .fhr{border-color:var(--border)}.fr2 .fhr{border-color:rgba(255,255,255,.1)}
+.felbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.fr1 .felbl,.fr3 .felbl{color:var(--hint)}.fr2 .felbl{color:rgba(255,255,255,.28)}
+.fitem{font-size:11px;line-height:1.5}
+.fr1 .fitem,.fr3 .fitem{color:var(--muted)}.fr2 .fitem{color:rgba(255,255,255,.45)}
+.fdl{font-size:9.5px;font-weight:700;border-radius:100px;padding:3px 11px;display:inline-block}
+.fr1 .fdl{background:#E2F4F7;color:#0B9BAF}.fr2 .fdl{background:rgba(232,80,58,.18);color:#FF7050}.fr3 .fdl{background:#E5EAF2;color:var(--ink2)}
+
+.tl{background:var(--card);border:1px solid var(--border);border-radius:var(--r20);padding:1.6rem}
+.tl-title{font-family:var(--serif);font-size:15px;font-weight:400;color:var(--ink);margin-bottom:1.25rem;letter-spacing:-.01em}
+.tlg{display:grid;grid-template-columns:90px repeat(6,1fr);gap:5px;align-items:center}
+.tlm{text-align:center;font-size:9px;color:var(--hint);text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.tll{font-size:10px;font-weight:700}
+.tlb{height:24px;border-radius:6px}
+.tle{height:24px}
+.tlleg{display:flex;gap:1.2rem;margin-top:1rem;flex-wrap:wrap}
+.tlleg-i{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);font-weight:500}
+.tldot{width:12px;height:8px;border-radius:3px}
+
+.pfooter{margin-top:4.5rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.pfn{font-size:10px;color:var(--hint);font-style:italic}
+.pft{font-size:10px;color:var(--hint);font-weight:700;letter-spacing:.05em}
+
+/* REVEAL */
+.r{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.r.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
 </style>
 </head>
 <body>
-<!-- PASSWORD SCREEN -->
-<div id="pw-screen" style="
-  position:fixed;inset:0;z-index:9999;
-  background:#F5F8FA;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Lexend Deca',sans-serif;
-">
-  <div style="
-    background:#fff;border:1px solid #DFE3EB;border-radius:16px;
-    padding:2.5rem 2.5rem 2rem;width:100%;max-width:380px;
-    box-shadow:0 8px 40px rgba(0,0,0,0.08);
-    text-align:center;
-  ">
-    <!-- Logo -->
-    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:1.75rem;">
-      <div style="display:flex;gap:3px;">
-        <div style="width:8px;height:8px;border-radius:2px;background:#E8503A;"></div>
-        <div style="width:8px;height:8px;border-radius:2px;background:#F5A623;"></div>
-        <div style="width:8px;height:8px;border-radius:2px;background:#5BBE6E;"></div>
-        <div style="width:8px;height:8px;border-radius:2px;background:#226DB4;"></div>
-      </div>
-      <span style="font-size:16px;font-weight:700;color:#1A1A1A;letter-spacing:0.04em;">zoho</span>
+
+<nav class="nav">
+  <div class="nav-l">
+    <div class="dots">
+      <div class="dot" style="background:#E8503A"></div>
+      <div class="dot" style="background:#F5A623"></div>
+      <div class="dot" style="background:#5BBE6E"></div>
+      <div class="dot" style="background:#226DB4"></div>
     </div>
-
-    <h2 style="font-size:20px;font-weight:700;color:#1A1A1A;margin-bottom:6px;letter-spacing:-0.02em;">Acesso restrito</h2>
-    <p style="font-size:13px;color:#7C98B6;font-weight:300;margin-bottom:1.75rem;line-height:1.5;">Canal de Agências Parceiras<br>Apresentação executiva</p>
-
-    <div style="position:relative;margin-bottom:1rem;">
-      <input
-        id="pw-input"
-        type="password"
-        placeholder="Digite a senha de acesso"
-        onkeydown="if(event.key==='Enter')checkPw()"
-        style="
-          width:100%;padding:12px 44px 12px 16px;
-          border:1.5px solid #DFE3EB;border-radius:8px;
-          font-family:'Lexend Deca',sans-serif;font-size:14px;color:#1A1A1A;
-          outline:none;transition:border-color 0.2s;
-          background:#F5F8FA;
-        "
-        onfocus="this.style.borderColor='#FF7A59';this.style.background='#fff'"
-        onblur="this.style.borderColor='#DFE3EB';this.style.background='#F5F8FA'"
-      />
-      <svg onclick="togglePw()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;opacity:0.4;" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#1A1A1A" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="#1A1A1A" stroke-width="2"/></svg>
-    </div>
-
-    <div id="pw-error" style="font-size:12px;color:#E74C3C;margin-bottom:0.75rem;height:16px;transition:opacity 0.2s;opacity:0;"></div>
-
-    <button onclick="checkPw()" style="
-      width:100%;padding:13px;
-      background:#FF7A59;border:none;border-radius:8px;
-      font-family:'Lexend Deca',sans-serif;font-size:14px;font-weight:600;color:#fff;
-      cursor:pointer;transition:background 0.2s,transform 0.15s;
-      letter-spacing:0.02em;
-    "
-    onmouseover="this.style.background='#FF5C35'"
-    onmouseout="this.style.background='#FF7A59'"
-    onmousedown="this.style.transform='scale(0.98)'"
-    onmouseup="this.style.transform='scale(1)'"
-    >Acessar apresentação →</button>
-
-    <p style="font-size:11px;color:#B0BEC5;margin-top:1.25rem;font-weight:300;">Zoho · Marketing BU · Abril 2026</p>
+    <span class="brand">zoho</span>
+    <div class="pipe"></div>
+    <span class="sub">Canal de Agências Parceiras</span>
   </div>
+  <div class="tag">Marketing BU · Abril 2026</div>
+</nav>
+
+<div class="page">
+
+<!-- ══════════════ C1 ══════════════ -->
+<section style="padding:5rem 0 0">
+  <div class="r"><div class="eyebrow">Camada 1 — Benchmark de mercado</div></div>
+  <div class="r d1"><h1 class="display">O mercado já provou.<br><em>O modelo funciona.</em></h1></div>
+  <p class="lead r d2">Programas de parceria com agências são o principal motor de crescimento em SaaS de marketing. Os dados da RD Station (líder nacional no segmento) confirmam que o canal de agências não é um bet, é uma tese comprovada.</p>
+
+  <div class="clbl r">Benchmarks SaaS — canal de parceiros</div>
+  <div class="bench r d1">
+    <div class="bc">
+      <div class="bc-accent" style="background:linear-gradient(90deg,var(--red),#FF8870)"></div>
+      <span class="bc-num" style="color:var(--red)">3–5×</span>
+      <span class="bc-lbl">Menor CAC<br>vs canal direto</span>
+    </div>
+    <div class="bc">
+      <div class="bc-accent" style="background:linear-gradient(90deg,var(--teal),#3DD0E0)"></div>
+      <span class="bc-num" style="color:var(--teal)">~$700</span>
+      <span class="bc-lbl">Ticket médio<br>mensal / parceiro</span>
+    </div>
+    <div class="bc">
+      <div class="bc-accent" style="background:linear-gradient(90deg,var(--blue),#4A8DD4)"></div>
+      <span class="bc-num" style="color:var(--blue)">8–12</span>
+      <span class="bc-lbl">Clientes por<br>agência ativa</span>
+    </div>
+  </div>
+  <p class="src r d2">* PartnerStack State of the Partner Ecosystem 2024 · Canalys SaaS Channel Partner Benchmark 2023</p>
+
+  <!-- RD STATION — visual novo -->
+  <div class="rd-wrap">
+    <div class="clbl r" style="margin-top:2rem">RD Station — ecossistema de parceiros (referência nacional)</div>
+
+    <!-- Linha de números: 3 células, a do meio é escura com nota -->
+    <div class="rd-numbers r d1">
+
+      <!-- Célula 1: 301 -->
+      <div class="rd-num-cell">
+        <div class="rdn-value" style="color:var(--teal)">301</div>
+        <div class="rdn-side">
+          <div class="rdn-label" style="color:var(--muted)">agências high performance<br>no ecossistema RD</div>
+        </div>
+      </div>
+
+      <!-- Célula 2: 60% — dark featured -->
+      <div class="rd-num-cell featured">
+        <div class="rdn-value" style="color:var(--orange)">60%</div>
+        <div class="rdn-side">
+          <div class="rdn-label" style="color:rgba(255,255,255,.4)">da receita total<br>da companhia</div>
+        </div>
+      </div>
+
+      <!-- Célula 3: nota editorial -->
+      <div class="rd-num-cell" style="background:#F8FAFB">
+        <div style="border-left:3px solid var(--border);padding-left:1.25rem">
+          <div class="rdn-note" style="color:var(--muted)">O canal de parceiros responde pela <strong style="color:var(--ink);font-weight:700">maior parte da receita da RD Station</strong>. Validando o modelo como estratégia central de crescimento, não complementar.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 5 tier cards horizontais -->
+    <div class="tiers-strip r d2">
+      <div class="tc"><span class="tc-badge tbd">Diamond</span><div class="tc-count">44</div><div><div class="tc-mrr-lbl">Managed MRR</div><div class="tc-mrr-val">R$40.000</div></div></div>
+      <div class="tc"><span class="tc-badge tbp">Platinum</span><div class="tc-count">85</div><div><div class="tc-mrr-lbl">Managed MRR</div><div class="tc-mrr-val">R$20.000</div></div></div>
+      <div class="tc"><span class="tc-badge tbg">Gold</span><div class="tc-count">77</div><div><div class="tc-mrr-lbl">Managed MRR</div><div class="tc-mrr-val">R$8.000</div></div></div>
+      <div class="tc"><span class="tc-badge tbs">Silver</span><div class="tc-count">95</div><div><div class="tc-mrr-lbl">Managed MRR</div><div class="tc-mrr-val">R$2.000</div></div></div>
+      <div class="tc"><span class="tc-badge tbm">Member</span><div class="tc-count" style="font-size:24px">~1.300</div><div><div class="tc-mrr-lbl">Managed MRR</div><div class="tc-mrr-val">~R$850</div></div></div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="hr">
+
+<!-- ══════════════ C2 ══════════════ -->
+<section style="padding:5rem 0 0">
+  <div class="r"><div class="eyebrow">Camada 2 — Status Zoho Brasil</div></div>
+  <div class="r d1"><h2 class="display">A base existe.<br><em>Falta estruturar o canal.</em></h2></div>
+  <p class="lead r d2">Agências estão interessadas no ecossistema de parceiros da Zoho Brasil, mas o ecossistema não opera de forma estruturada e escalável. <span class="callout">O potencial é claro, porém, subaproveitado.</span></p>
+
+  <div class="clbl r">Momento atual — Zoho Brasil</div>
+  <div class="kpis">
+    <div class="kpi k1 r d1"><div class="kpi-n" style="color:var(--teal)" id="kpi1">11</div><div class="kpi-l">Agências ativas</div><div class="kpi-s">Gerando receita hoje</div></div>
+    <div class="kpi k2 r d2"><div class="kpi-n" style="color:var(--blue)" id="kpi2">35</div><div class="kpi-l">No pipeline</div><div class="kpi-s">Em negociação ou onboarding</div></div>
+  </div>
+  <div class="gapbox r d3"><strong>Gap estratégico:</strong> a RD Station possui uma estrutura dedicada — farmer, onboarding e enablement — para atração, capacitação e engajamento contínuo das agências parceiras. A Zoho está gerando interesse: temos dezenas de parceiros considerando e/ou ativos no ecossistema. Porém, falta a estrutura necessária para manter o engajamento e garantir a recorrência de performance.</div>
+</section>
+
+<hr class="hr">
+
+<!-- ══════════════ C3 ══════════════ -->
+<section style="padding:5rem 0 0">
+  <div class="r"><div class="eyebrow">Camada 3 — Projeção de crescimento 2026</div></div>
+  <div class="r d1"><h2 class="display">Com estrutura,<br><em>o crescimento é previsível.</em></h2></div>
+  <p class="lead r d2">Modelo de crescimento baseado em cadência de recrutamento mensal com ramp-up de 3 meses para a primeira venda. A meta de ARR acumulado de R$652k depende da atuação coordenada de três papéis.</p>
+
+  <div class="clbl r">Lógica do modelo — como chegamos a R$652k</div>
+  <div class="flow r d1">
+    <div class="fb fbt"><div class="ft">Hunter</div><div class="fn">~8</div><div class="fs">agências/mês</div><div class="fno">Meta: 5–8 ao longo do ano</div></div>
+    <div class="fa">→</div>
+    <div class="fb fbg"><div class="ft">Ramp-up</div><div class="fn">3m</div><div class="fs">para 1ª venda</div><div class="fno">Jan→Mar sem vendas</div></div>
+    <div class="fa">→</div>
+    <div class="fb fbb"><div class="ft">80 ag. Dez/26</div><div class="fn">34</div><div class="fs">vendas/mês<br>0,6 × 80 ag.</div></div>
+    <div class="fa">→</div>
+    <div class="fb fbn"><div class="ft">ARR 2026</div><div class="fn">R$652k</div><div class="fs">34 vendas ×<br>R$4k · acumulado</div></div>
+  </div>
+
+  <div class="proj">
+    <div class="ccrd r d1">
+      <div class="ct">ARR acumulado — crescimento mensal 2026</div>
+      <div class="cs">Agências ativas por mês + ARR acumulado (R$)</div>
+      <div style="position:relative;height:220px"><canvas id="projChart" role="img" aria-label="Crescimento agências e ARR 2026"></canvas></div>
+      <div class="cleg">
+        <div class="cli"><div class="cll" style="background:var(--teal)"></div>Agências ativas</div>
+        <div class="cli"><div class="cll" style="background:var(--red);height:0;border-top:2.5px dashed var(--red)"></div>ARR acumulado</div>
+      </div>
+    </div>
+    <div class="rresults r d2">
+      <div class="rlbl">Resultados projetados — Dez/26</div>
+      <div class="rc"><div class="rsl" style="color:var(--teal)">Agências ativas</div><div class="rv" style="color:var(--teal)">80</div><div class="rd" style="color:var(--muted)">Hunter recruta ~8 ag./mês. Após 3 meses cada uma começa a vender.</div></div>
+      <div class="rc"><div class="rsl" style="color:var(--red)">Partner sales em Dez/26</div><div class="rv" style="color:var(--red)">34 vendas/mês</div><div class="rd" style="color:var(--muted)">80 ag. × 0,6 vendas × ticket R$4k = R$136k de receita mensal</div></div>
+      <div class="rc feat"><div class="rsl" style="color:rgba(255,255,255,.38)">★ Meta ARR acumulado 2026</div><div class="rv" style="color:white">R$652k</div><div class="rd" style="color:rgba(255,255,255,.45)">Soma da receita gerada mês a mês com o canal estruturado.</div></div>
+    </div>
+  </div>
+
+  <div class="clbl r" style="margin-top:2.2rem">Insumos críticos</div>
+  <div class="ins">
+    <div class="in r d1" style="border-left:4px solid var(--red)"><div class="in-t" style="color:var(--red)">Farmer — headcount dedicado</div>Principal habilitador do crescimento. Sem um farmer dedicado, as agências ativas perdem engajamento e a recorrência de vendas não se sustenta.</div>
+    <div class="in r d2" style="border-left:4px solid var(--teal)"><div class="in-t" style="color:var(--teal)">Partner Marketing — geração de demanda</div>Principal responsável por gerar demanda e manter os parceiros engajados, vendo valor contínuo no programa de parceria.</div>
+  </div>
+</section>
+
+<hr class="hr">
+
+<!-- ══════════════ PRÓXIMOS PASSOS ══════════════ -->
+<section style="padding:5rem 0 0">
+  <div class="pstop">
+    <div>
+      <div class="r"><div class="eyebrow">Próximos passos — execução</div></div>
+      <div class="r d1"><h2 class="display">Três frentes.<br><em>Um objetivo.</em></h2></div>
+      <p class="lead r d2" style="margin-bottom:0">Frentes de trabalho paralelas para estruturar o canal e colocar o ecossistema em modo de crescimento.</p>
+    </div>
+    <div class="dlb r d1"><div class="dll">Deadline geral</div><div class="dlv">Q2 · 2026</div></div>
+  </div>
+
+  <div class="frentes">
+    <div class="frente fr1 r d1">
+      <div class="ftag">Frente 01 · Ativar</div>
+      <div class="ftitle2">Construção do onboarding de parceiros</div>
+      <div class="fdesc">Estruturar o processo de entrada e ativação de novos parceiros, reduzindo o tempo até a primeira venda e garantindo engajamento no período starter.</div>
+      <hr class="fhr">
+      <div class="felbl">Entregas</div>
+      <div class="fitem">· Trilha de onboarding com milestones de 30 dias</div>
+      <div class="fitem">· Kit de materiais: decks, battle cards, simulador de proposta</div>
+      <div class="fitem">· Checkpoints de ativação e pontos de contato</div>
+      <div><span class="fdl">Abril → Maio 2026</span></div>
+    </div>
+    <div class="frente fr2 r d2">
+      <div class="ftag">Frente 02 · Converter</div>
+      <div class="ftitle2">Aceleração comercial — farmer dedicado</div>
+      <div class="fdesc">Criar um processo ativo de co-venda e gestão de parceiros, com cadência de contato, playbook e incentivos para aumentar a recorrência de vendas.</div>
+      <hr class="fhr">
+      <div class="felbl">Entregas</div>
+      <div class="fitem">· Playbook de co-venda com regras e papéis</div>
+      <div class="fitem">· Cadência mensal de contato e revisão de pipeline</div>
+      <div class="fitem">· Programa de incentivos por tier de performance</div>
+      <div><span class="fdl">Abril → Maio 2026</span></div>
+    </div>
+    <div class="frente fr3 r d3">
+      <div class="ftag">Frente 03 · Atrair</div>
+      <div class="ftitle2">Plano de growth e aquisição de parceiros</div>
+      <div class="fdesc">Desenvolver um fluxo ativo de prospecção e atração de novas agências, com ICP definido, GTM estruturado e canais de aquisição claros.</div>
+      <hr class="fhr">
+      <div class="felbl">Entregas</div>
+      <div class="fitem">· ICP de agência ideal e scoring de qualificação</div>
+      <div class="fitem">· Fluxo de outreach e landing page do programa</div>
+      <div class="fitem">· Presença em eventos e webinar de lançamento</div>
+      <div><span class="fdl">Maio → Junho 2026</span></div>
+    </div>
+  </div>
+
+  <div class="tl r">
+    <div class="tl-title">Timeline de execução</div>
+    <div class="tlg">
+      <div></div>
+      <div class="tlm">Abr</div><div class="tlm">Mai</div><div class="tlm">Jun</div>
+      <div class="tlm">Jul</div><div class="tlm">Ago</div><div class="tlm">Set</div>
+      <div class="tll" style="color:var(--teal)">Onboarding</div>
+      <div class="tlb" style="background:#C5E8ED"></div><div class="tlb" style="background:var(--teal)"></div><div class="tlb" style="background:var(--teal)"></div><div class="tlb" style="background:#C5E8ED"></div><div class="tle"></div><div class="tle"></div>
+      <div class="tll" style="color:var(--red)">Farmer</div>
+      <div class="tle"></div><div class="tlb" style="background:#FFD8D2"></div><div class="tlb" style="background:var(--red)"></div><div class="tlb" style="background:var(--red)"></div><div class="tlb" style="background:#FFD8D2"></div><div class="tle"></div>
+      <div class="tll" style="color:var(--ink)">Growth</div>
+      <div class="tle"></div><div class="tle"></div><div class="tlb" style="background:#CDD5E0"></div><div class="tlb" style="background:var(--ink)"></div><div class="tlb" style="background:var(--ink)"></div><div class="tlb" style="background:var(--ink)"></div>
+    </div>
+    <div class="tlleg">
+      <div class="tlleg-i"><div class="tldot" style="background:var(--teal)"></div>Onboarding</div>
+      <div class="tlleg-i"><div class="tldot" style="background:var(--red)"></div>Farmer</div>
+      <div class="tlleg-i"><div class="tldot" style="background:var(--ink)"></div>Growth</div>
+      <div class="tlleg-i"><div class="tldot" style="background:#CDD5E0;border:1px solid var(--border)"></div>Ramp-up</div>
+    </div>
+  </div>
+</section>
+
+<div class="pfooter">
+  <div class="pfn">* PartnerStack State of the Partner Ecosystem 2024 · Canalys SaaS Channel Partner Benchmark 2023</div>
+  <div class="pft">Zoho · Marketing BU · PMM</div>
 </div>
-
-<script>
-function checkPw() {
-  const val = document.getElementById('pw-input').value;
-  const err = document.getElementById('pw-error');
-  const btn = document.querySelector('#pw-screen button');
-
-  if (val === 'mktbu2026') {
-    const screen = document.getElementById('pw-screen');
-    screen.style.transition = 'opacity 0.5s ease';
-    screen.style.opacity = '0';
-    setTimeout(() => screen.remove(), 500);
-  } else {
-    err.textContent = 'Senha incorreta. Tente novamente.';
-    err.style.opacity = '1';
-    const input = document.getElementById('pw-input');
-    input.style.borderColor = '#E74C3C';
-    input.style.background = '#FFF5F5';
-    btn.style.background = '#E74C3C';
-    setTimeout(() => {
-      btn.style.background = '#FF7A59';
-      input.style.borderColor = '#DFE3EB';
-      input.style.background = '#F5F8FA';
-    }, 1200);
-    setTimeout(() => { err.style.opacity = '0'; }, 2500);
-    input.value = '';
-    input.focus();
-  }
-}
-
-function togglePw() {
-  const input = document.getElementById('pw-input');
-  input.type = input.type === 'password' ? 'text' : 'password';
-}
-</script>
-
-<div class="shell">
-
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="tl">
-    <div class="t-dots">
-      <div class="t-dot" style="background:#E8503A"></div>
-      <div class="t-dot" style="background:#F5A623"></div>
-      <div class="t-dot" style="background:#5BBE6E"></div>
-      <div class="t-dot" style="background:#226DB4"></div>
-    </div>
-    <span class="t-brand">zoho</span>
-    <span class="t-sep">|</span>
-    <span class="t-sub">Canal de Agências Parceiras</span>
-  </div>
-  <span class="t-counter" id="counter">01 / 03</span>
-</div>
-
-<!-- SLIDES -->
-<div class="slides">
-
-<!-- ══ SLIDE 1 ══ -->
-<div class="slide active" id="slide-1">
-
-  <div class="eyebrow">Camada 1</div>
-  <h1 class="slide-h1">O canal de agências como<br><em>alavanca de receita</em></h1>
-  <p class="slide-p">Agências parceiras serão o principal canal de distribuição da BU de Marketing. As agências vão gerar receita recorrente previsível com menor custo de aquisição e maior velocidade de fechamento.</p>
-
-  <!-- STATS -->
-  <div class="stat-strip">
-    <div class="stat-cell">
-      <span class="stat-num orange">3–5×</span>
-      <span class="stat-lbl">Menor CAC vs canal direto</span>
-    </div>
-    <div class="stat-cell">
-      <span class="stat-num teal">~$700</span>
-      <span class="stat-lbl">Ticket médio mensal / parceiro</span>
-    </div>
-    <div class="stat-cell">
-      <span class="stat-num green">8–12</span>
-      <span class="stat-lbl">Clientes por agência ativa</span>
-    </div>
-  </div>
-  <p class="source-note">* Ticket médio estimado com base em benchmarks de canais de parceiros SaaS — PartnerStack State of the Partner Ecosystem Report 2024. Volume médio de clientes por agência — Canalys SaaS Channel Partner Benchmark 2023.</p>
-
-  <!-- WHY -->
-  <div class="feature-section" style="margin-top:1.5rem;">
-    <div class="feature-section-title">Por que agências são uma alavanca estratégica?</div>
-    <div class="feature-grid">
-
-      <div class="feature-item" style="border-top:3px solid #0091AE;">
-        <div class="fi-icon" style="background:#E5F5F8;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#0091AE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="fi-title">Efeito multiplicador de receita</div>
-        <div class="fi-desc">Cada agência ativa traz múltiplos clientes finais para o ecossistema Zoho, ampliando o alcance sem aumentar o custo de aquisição (CAC) e o custo operacional (headcount).</div>
-      </div>
-
-      <div class="feature-item" style="border-top:3px solid #FF7A59;">
-        <div class="fi-icon" style="background:#FFF1ED;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#FF7A59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="fi-title">Velocidade de fechamento</div>
-        <div class="fi-desc">Agências chegam com contexto e confiança do cliente já estabelecidos — ciclo de vendas significativamente mais curto que no canal direto.</div>
-      </div>
-
-      <div class="feature-item" style="border-top:3px solid #0091AE;">
-        <div class="fi-icon" style="background:#E5F7F2;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00A4BD" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#00A4BD" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
-        <div class="fi-title">Receita previsível e recorrente</div>
-        <div class="fi-desc">Parceiros bem ativados geram receita mensal estável com baixo churn, contribuindo diretamente para o ARR (Annual Recurring Revenue) da BU de Marketing.</div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- HOW IT WORKS -->
-  <div class="feature-section-title" style="margin-top:1.5rem;margin-bottom:1rem;">Como o canal funciona</div>
-  <div class="canal-grid">
-
-    <div class="canal-card c1">
-      <div class="canal-icon" style="background:#E5F5F8;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#0091AE" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0091AE" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-      <div class="canal-eyebrow t">Zoho</div>
-      <div class="canal-title">Produto · Suporte · Comissão</div>
-      <div class="canal-desc">Fornece a plataforma, suporte técnico e estrutura de comissionamento para que a agência venda com margem e segurança.</div>
-    </div>
-
-    <div class="canal-card c2">
-      <div class="canal-icon" style="background:rgba(255,122,89,0.18);">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#FF7A59" stroke-width="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="#FF7A59" stroke-width="2"/></svg>
-      </div>
-      <div class="canal-eyebrow o">Agência Parceira</div>
-      <div class="canal-title">Implementação · Gestão · Venda</div>
-      <div class="canal-desc">Executa a venda consultiva, implementa a plataforma e gerencia o relacionamento com os clientes finais, gerando receita recorrente.</div>
-    </div>
-
-    <div class="canal-card c3">
-      <div class="canal-icon" style="background:#E5F7F2;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#00A4BD" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#00A4BD" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#00A4BD" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-      <div class="canal-eyebrow g">Clientes Finais</div>
-      <div class="canal-title">Adoção · Renovação · Expansão</div>
-      <div class="canal-desc">Adotam a plataforma Zoho com suporte da agência, gerando contratos recorrentes que alimentam o ARR da BU de Marketing.</div>
-    </div>
-
-  </div>
-
-</div>
-
-<!-- ══ SLIDE 2 ══ -->
-<div class="slide" id="slide-2">
-
-  <div class="eyebrow">Camada 2</div>
-  <h1 class="slide-h1">Status atual e projeção<br><em>de crescimento</em></h1>
-  <p class="slide-p">Momento atual do ecossistema e cenários de<br>crescimento com a estruturação do canal.</p>
-
-  <!-- KPI STRIP -->
-  <div class="kpi-grid">
-    <div class="kpi-card k1">
-      <span class="kpi-num t">11</span>
-      <span class="kpi-lbl">Agências ativas</span>
-      <div class="kpi-sub">Gerando receita hoje</div>
-    </div>
-    <div class="kpi-card k2">
-      <span class="kpi-num g">35</span>
-      <span class="kpi-lbl">No pipeline</span>
-      <div class="kpi-sub">Em negociação ou onboarding</div>
-    </div>
-    <div class="kpi-card k3">
-      <span class="kpi-num o">N/A</span>
-      <span class="kpi-lbl">Receita mensal atual</span>
-      <div class="kpi-sub">MRR gerado pelo canal</div>
-    </div>
-    <div class="kpi-card k4">
-      <span class="kpi-num n">N/A</span>
-      <span class="kpi-lbl">Ticket médio / agência</span>
-      <div class="kpi-sub">Receita média mensal por parceiro</div>
-    </div>
-  </div>
-
-  <!-- TABLE + CHART -->
-  <div class="mid-grid">
-
-    <div class="t-card">
-      <div class="t-head">Agências no ecossistema</div>
-      <div class="t-body">
-      <div class="t-row"><span class="t-name">Zeniti</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">Bzness MKT Digital</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">Growwin</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">Corre Marketing</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">Savvi</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">Octans</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">Persuadindo</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">BLDN Digital</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">My Brief</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">Nambbu</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      <div class="t-row"><span class="t-name">AlmaLab</span><span class="t-badge tb-a">Ativa</span><span class="t-val">—</span></div>
-      </div>
-    </div>
-
-    <div class="chart-card">
-      <div style="margin-bottom:1rem;">
-        <div class="chart-title" style="margin-bottom:3px;">Projeção de receita — 2026</div>
-        <div style="font-size:11px;color:var(--hint);font-weight:300;">Modelo baseado em cadência de 4–8 agências/mês com ramp-up de 2 meses</div>
-      </div>
-      <canvas id="revenueChart" height="160"></canvas>
-      <div style="height:1px;background:var(--border);margin:12px 0 10px;"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 1.5rem;">
-        <div style="display:flex;align-items:flex-start;gap:8px;">
-          <div style="width:10px;height:10px;border-radius:2px;background:#88C9D8;flex-shrink:0;margin-top:2px;"></div>
-          <div style="font-size:10.5px;color:var(--muted);line-height:1.4;"><strong style="color:var(--navy);font-weight:600;">MRR</strong> — Monthly Recurring Revenue: receita mensal recorrente gerada pelo canal</div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:8px;">
-          <div style="width:10px;height:10px;border-radius:2px;background:#0091AE;flex-shrink:0;margin-top:2px;"></div>
-          <div style="font-size:10.5px;color:var(--muted);line-height:1.4;"><strong style="color:var(--navy);font-weight:600;">ARR</strong> — Annual Recurring Revenue: receita anual acumulada projetada</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- SCENARIO STRIP -->
-  <div class="sc-strip" style="grid-template-columns:1fr 1fr;">
-    <div class="sc">
-      <div class="sc-label t">Ramp-up 2026</div>
-      <div class="sc-val n">R$136k MRR</div>
-      <div class="sc-desc">Receita mensal em Dez/26 · 80 agências ativas ao final do ano · 34 vendas/mês</div>
-    </div>
-    <div class="sc featured">
-      <div class="sc-label w">★ ARR acumulado 2026</div>
-      <div class="sc-val w">R$652k</div>
-      <div class="sc-desc w">Receita total acumulada no ano com estruturação do canal de parceiros</div>
-    </div>
-  </div>
 
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-(function() {
-  function initChart() {
-    var canvas = document.getElementById('revenueChart');
-    if (!canvas || !window.Chart) { setTimeout(initChart, 100); return; }
-    var ctx = canvas.getContext('2d');
-    window.revenueChartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Hoje', 'MRR Dez/26', 'ARR 2026'],
-        datasets: [{
-          data: [0, 136000, 652000],
-          backgroundColor: ['#CCE9EE', '#88C9D8', '#0091AE'],
-          borderRadius: 8,
-          borderSkipped: false,
-          borderWidth: 0,
-          hoverBackgroundColor: ['#B3D8DF', '#6AB8CA', '#007A95'],
-        }]
-      },
-      options: {
-        responsive: true,
-        animation: {
-          duration: 1200,
-          easing: 'easeOutQuart',
-          delay: function(ctx) { return ctx.dataIndex * 200; }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#2D3E50',
-            titleFont: { family: "'Lexend Deca', sans-serif", size: 11 },
-            bodyFont:  { family: "'Lexend Deca', sans-serif", size: 12, weight: '600' },
-            padding: 10,
-            cornerRadius: 8,
-            callbacks: {
-              title: function(items) {
-                var labels = ['Sem estruturação', 'MRR — Receita mensal em Dez/26', 'ARR — Receita acumulada 2026'];
-                return labels[items[0].dataIndex];
-              },
-              label: function(item) {
-                if (item.raw === 0) return ' N/A';
-                return ' R$' + (item.raw >= 1000000
-                  ? (item.raw/1000000).toFixed(1) + 'M'
-                  : (item.raw/1000).toFixed(0) + 'k');
-              }
-            }
-          },
-          datalabels: { display: false }
-        },
-        scales: {
-          x: {
-            grid: { display: false },
-            border: { display: false },
-            ticks: {
-              color: '#99ACC2',
-              font: { family: "'Lexend Deca', sans-serif", size: 11 }
-            }
-          },
-          y: {
-            grid: { color: '#F0EAE2', lineWidth: 1 },
-            border: { display: false, dash: [4,4] },
-            ticks: {
-              color: '#99ACC2',
-              font: { family: "'Lexend Deca', sans-serif", size: 10 },
-              maxTicksLimit: 5,
-              callback: function(v) {
-                if (v === 0) return 'N/A';
-                return 'R$' + (v >= 1000000 ? (v/1000000).toFixed(1)+'M' : (v/1000).toFixed(0)+'k');
-              }
-            }
-          }
-        }
-      }
-    });
+(function(){
+  var M=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  var AG=[6,11,16,22,28,34,41,48,56,64,72,80];
+  var ARR=[0,0,8000,24000,52000,92000,148000,216000,300000,400000,516000,652000];
+  function init(){
+    var c=document.getElementById('projChart');
+    if(!c||!window.Chart){setTimeout(init,100);return}
+    new Chart(c.getContext('2d'),{type:'line',data:{labels:M,datasets:[
+      {label:'Agências',data:AG,borderColor:'#0B9BAF',backgroundColor:'rgba(11,155,175,.07)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#0B9BAF',pointBorderColor:'#fff',pointBorderWidth:2,fill:true,tension:.4,yAxisID:'y'},
+      {label:'ARR',data:ARR,borderColor:'#E8503A',backgroundColor:'rgba(232,80,58,0)',borderWidth:2.5,borderDash:[5,4],pointRadius:4,pointBackgroundColor:'#E8503A',pointBorderColor:'#fff',pointBorderWidth:2,fill:false,tension:.4,yAxisID:'y2'}
+    ]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:1200,easing:'easeOutQuart'},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#0A1628',titleFont:{family:'DM Sans,sans-serif',size:11,weight:'700'},bodyFont:{family:'DM Sans,sans-serif',size:12},padding:12,cornerRadius:10,callbacks:{label:function(i){return i.datasetIndex===0?'  '+i.raw+' agências':'  R$'+(i.raw>=1000?(i.raw/1000).toFixed(0)+'k':i.raw)}}}},
+      scales:{x:{grid:{display:false},border:{display:false},ticks:{color:'#8C9BAD',font:{family:'DM Sans,sans-serif',size:10},maxRotation:0}},y:{position:'left',grid:{color:'rgba(10,22,40,.04)'},border:{display:false},ticks:{color:'#0B9BAF',font:{family:'DM Sans,sans-serif',size:10},maxTicksLimit:5,callback:function(v){return v+' ag.'}}},y2:{position:'right',grid:{display:false},border:{display:false},ticks:{color:'#E8503A',font:{family:'DM Sans,sans-serif',size:10},maxTicksLimit:5,callback:function(v){return v>=1000?'R$'+(v/1000).toFixed(0)+'k':'R$'+v}}}}}});
   }
-  document.addEventListener('DOMContentLoaded', function() { setTimeout(initChart, 300); });
+  init();
 })();
-</script>
 
-<!-- ══ SLIDE 3 ══ -->
-<div class="slide" id="slide-3">
+var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('on');obs.unobserve(x.target)}})},{threshold:.1,rootMargin:'0px 0px -24px 0px'});
+document.querySelectorAll('.r').forEach(function(el){obs.observe(el)});
 
-  <div class="eyebrow">Camada 3</div>
-  <h1 class="slide-h1">Próximos passos e<br><em>insumos necessários</em></h1>
+function animCount(el,target,dur){var s=performance.now();(function tick(now){var p=Math.min((now-s)/dur,1);var e2=1-Math.pow(1-p,3);el.textContent=Math.round(e2*target).toLocaleString('pt-BR');if(p<1)requestAnimationFrame(tick)})(performance.now())}
+var ko=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){if(x.target.id==='kpi1')animCount(x.target,11,900);if(x.target.id==='kpi2')animCount(x.target,35,900);ko.unobserve(x.target)}})},{threshold:.6});
+['kpi1','kpi2'].forEach(function(id){var el=document.getElementById(id);if(el)ko.observe(el)});
 
-  <div style="display:grid;grid-template-columns:1fr auto;align-items:start;gap:2rem;margin-bottom:2rem;">
-    <p class="slide-p" style="margin-bottom:0;">Três frentes de trabalho paralelas para estruturar o canal e colocar o ecossistema em modo de crescimento.</p>
-    <div class="deadline">
-      <div class="deadline-lbl">Deadline geral</div>
-      <div class="deadline-val">Q2 · 2026</div>
-    </div>
-  </div>
-
-  <!-- FRENTES — HubSpot style: sem card, direto no bg, separadas por linha vertical -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem;">
-
-    <!-- Frente 01 -->
-    <div class="frente-col" data-color="#0091AE" data-bg="rgba(0,145,174,0.06)" style="padding:1.75rem 1.75rem 1.5rem;border-top:3px solid #0091AE;"><div class="spotlight"></div>
-      <div style="width:52px;height:52px;border-radius:12px;background:#E5F5F8;border:2px solid #0091AE;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#0091AE" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#0091AE" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#0091AE" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-      <div style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--teal);display:inline-block;"></span>Frente 01 · Ativar</div>
-      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:10px;">Construção do onboarding de parceiros</div>
-      <div style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:1.25rem;">Estruturar o processo de entrada e ativação de novos parceiros, reduzindo o tempo até a primeira venda, aumentando a taxa de ativação e garantindo o engajamento durante o período starter.</div>
-      <div style="border-top:1px solid var(--border);padding-top:1rem;margin-bottom:0.75rem;">
-        <div style="font-size:9.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--hint);margin-bottom:10px;">Entregas</div>
-        <div style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;display:flex;flex-direction:column;gap:6px;">
-          <div>· Trilha de onboarding com milestones de 30 dias</div>
-          <div>· Kit de materiais: decks, battle cards, simulador de proposta</div>
-          <div>· Checkpoints de ativação e pontos de contato</div>
-        </div>
-      </div>
-      <div style="font-size:10.5px;font-weight:600;color:var(--teal);background:#E5F5F8;border-radius:100px;padding:4px 12px;display:inline-block;margin-top:1rem;">Abril → Maio 2026</div>
-    </div>
-
-    <!-- Frente 02 — FEATURED -->
-    <div class="frente-col" data-color="#FF7A59" data-bg="rgba(255,122,89,0.12)" style="padding:1.75rem 1.75rem 1.5rem;border-top:3px solid #FF7A59;background:var(--navy) !important;box-shadow:0 12px 40px rgba(45,62,80,0.25);border-color:var(--navy) !important;"><div class="spotlight"></div>
-      <div style="width:52px;height:52px;border-radius:12px;background:rgba(255,122,89,0.2);border:2px solid #FF7A59;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#FF7A59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#FF7A59;margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:#FF7A59;display:inline-block;"></span>Frente 02 · Converter</div>
-      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:white;line-height:1.3;margin-bottom:10px;">Aceleração comercial — Farmer dedicado</div>
-      <div style="font-size:12.5px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.65;margin-bottom:1.25rem;">Criar um processo ativo de co-venda e gestão de parceiros existentes, com cadência clara de contato, playbook e incentivos para aumentar a recorrência e consistência em vendas via canal de parceiros.</div>
-      <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:1rem;margin-bottom:0.75rem;">
-        <div style="font-size:9.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px;">Entregas</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.6;display:flex;flex-direction:column;gap:6px;">
-          <div>· Playbook de co-venda com regras e papéis</div>
-          <div>· Cadência mensal de contato e revisão de pipeline</div>
-          <div>· Programa de incentivos por tier de performance</div>
-        </div>
-      </div>
-      <div style="font-size:10.5px;font-weight:600;color:#FF7A59;background:rgba(255,122,89,0.15);border-radius:100px;padding:4px 12px;display:inline-block;margin-top:1rem;">Abril → Maio 2026</div>
-    </div>
-
-    <!-- Frente 03 -->
-    <div class="frente-col" data-color="#2D3E50" data-bg="rgba(45,62,80,0.05)" style="padding:1.75rem 1.75rem 1.5rem;border-top:3px solid #2D3E50;"><div class="spotlight"></div>
-      <div style="width:52px;height:52px;border-radius:12px;background:#E8ECF4;border:2px solid #2D3E50;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#2D3E50" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="#2D3E50" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-      <div style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:5px;height:5px;border-radius:50%;background:var(--navy);display:inline-block;"></span>Frente 03 · Atrair</div>
-      <div style="font-family:var(--serif);font-size:17px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:10px;">Plano de growth e aquisição de parceiros</div>
-      <div style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:1.25rem;">Desenvolver um fluxo ativo de prospecção e atração de novas agências, com ICP definido, GTM estruturado e canais de aquisição claros. Além de um plano de engajamento e nutrição de agências ativas no ecossistema.</div>
-      <div style="border-top:1px solid var(--border);padding-top:1rem;margin-bottom:0.75rem;">
-        <div style="font-size:9.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--hint);margin-bottom:10px;">Entregas</div>
-        <div style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;display:flex;flex-direction:column;gap:6px;">
-          <div>· ICP de agência ideal e scoring de qualificação</div>
-          <div>· Fluxo de outreach e landing page do programa</div>
-          <div>· Presença em eventos e webinar de lançamento</div>
-        </div>
-      </div>
-      <div style="font-size:10.5px;font-weight:600;color:var(--navy);background:#E8ECF4;border-radius:100px;padding:4px 12px;display:inline-block;margin-top:1rem;">Maio → Junho 2026</div>
-    </div>
-
-  </div>
-
-
-  <!-- INSUMOS + TIMELINE -->
-  <div class="ins-grid">
-
-    <div class="ins-card">
-      <div class="ins-title">Insumos necessários</div>
-      <div class="ins-row">
-        <span class="ins-badge ib-hi">Crítico</span>
-        <span class="ins-text">Headcount — farmer dedicado para aceleração comercial dos parceiros</span>
-      </div>
-    </div>
-
-    <div class="tl-card">
-      <div class="tl-title">Timeline de execução</div>
-      <div class="tl-grid">
-        <div></div>
-        <div class="tl-month">Abr</div>
-        <div class="tl-month">Mai</div>
-        <div class="tl-month">Jun</div>
-        <div class="tl-month">Jul</div>
-        <div class="tl-month">Ago</div>
-        <div class="tl-month">Set</div>
-
-        <div class="tl-row-label" style="color:var(--teal)">Onboarding</div>
-        <div class="tl-bar" style="background:#CCE9EE"></div>
-        <div class="tl-bar" style="background:var(--teal)"></div>
-        <div class="tl-bar" style="background:var(--teal)"></div>
-        <div class="tl-bar" style="background:#CCE9EE"></div>
-        <div></div><div></div>
-
-        <div class="tl-row-label" style="color:var(--orange)">Farmer</div>
-        <div></div>
-        <div class="tl-bar" style="background:#FFE5DE"></div>
-        <div class="tl-bar" style="background:var(--orange)"></div>
-        <div class="tl-bar" style="background:var(--orange)"></div>
-        <div class="tl-bar" style="background:#FFE5DE"></div>
-        <div></div>
-
-        <div class="tl-row-label" style="color:var(--navy)">Growth</div>
-        <div></div><div></div>
-        <div class="tl-bar" style="background:#D0D8E4"></div>
-        <div class="tl-bar" style="background:var(--navy)"></div>
-        <div class="tl-bar" style="background:var(--navy)"></div>
-        <div class="tl-bar" style="background:var(--navy)"></div>
-      </div>
-      <div class="tl-legend">
-        <div class="tl-leg-item"><div class="tl-leg-dot" style="background:var(--teal)"></div>Onboarding</div>
-        <div class="tl-leg-item"><div class="tl-leg-dot" style="background:var(--orange)"></div>Farmer</div>
-        <div class="tl-leg-item"><div class="tl-leg-dot" style="background:var(--navy)"></div>Growth</div>
-      </div>
-    </div>
-
-  </div>
-
-</div>
-</div><!-- /slides -->
-
-<!-- BOTTOM NAV -->
-<div class="bottomnav">
-  <div class="nav-tabs">
-    <div class="nav-tab active" onclick="goToWithReveal(1)" id="tab-1">
-      <span class="tab-pill">1</span>Canal como alavanca de receita
-    </div>
-    <div class="nav-tab" onclick="goToWithReveal(2)" id="tab-2">
-      <span class="tab-pill">2</span>Status atual e projeção
-    </div>
-    <div class="nav-tab" onclick="goToWithReveal(3)" id="tab-3">
-      <span class="tab-pill">3</span>Próximos passos
-    </div>
-  </div>
-  <div class="nav-arrows">
-    <button class="nav-btn" id="btn-prev" onclick="prev()" disabled>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <button class="nav-btn" id="btn-next" onclick="next()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-</div>
-
-</div><!-- /shell -->
-
-<script>
-let cur = 1;
-const total = 3;
-
-/* ── ANIMATED NUMBER COUNTER ── */
-function animateCounter(el, target, duration, prefix, suffix) {
-  const start = performance.now();
-  const isFloat = target % 1 !== 0;
-  function tick(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
-    const val = Math.round(ease * target);
-    el.textContent = prefix + val.toLocaleString('pt-BR') + suffix;
-    if (progress < 1) requestAnimationFrame(tick);
-    else el.textContent = prefix + target.toLocaleString('pt-BR') + suffix;
-  }
-  requestAnimationFrame(tick);
-}
-
-function runCounters(slideId) {
-  const targets = {
-    'slide-2': [
-      { sel: '.kpi-num.t', val: 11, pre: '', suf: '' },
-      { sel: '.kpi-num.g', val: 35, pre: '', suf: '' },
-    ]
-  };
-  if (!targets[slideId]) return;
-  const slide = document.getElementById(slideId);
-  targets[slideId].forEach(({ sel, val, pre, suf }) => {
-    const el = slide.querySelector(sel);
-    if (el) animateCounter(el, val, 900, pre, suf);
-  });
-}
-
-/* ── RE-TRIGGER ANIMATIONS ON SLIDE CHANGE ── */
-function replayAnimations(slideEl) {
-  const animated = slideEl.querySelectorAll('[style*="animation"], .stat-cell, .canal-card, .kpi-card, .tl-bar');
-  // Force reflow to restart CSS animations
-  slideEl.style.display = 'none';
-  void slideEl.offsetHeight;
-  slideEl.style.display = '';
-}
-
-/* ── SLIDE TRANSITION WITH DIRECTION ── */
-
-function goTo(n) {
-  const prevEl = document.getElementById('slide-' + cur);
-  prevEl.classList.remove('active');
-  prevEl.classList.add('out');
-  setTimeout(() => prevEl.classList.remove('out'), 400);
-  cur = n;
-  const nextEl = document.getElementById('slide-' + cur);
-  nextEl.classList.remove('active');
-  void nextEl.offsetHeight; // retrigger CSS animations
-  nextEl.classList.add('active');
-  document.getElementById('counter').textContent = String(cur).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
-  for (let i = 1; i <= total; i++) {
-    document.getElementById('tab-' + i).classList.toggle('active', i === cur);
-  }
-  document.getElementById('btn-prev').disabled = cur === 1;
-  document.getElementById('btn-next').disabled = cur === total;
-  setTimeout(() => runCounters('slide-' + cur), 250);
-}
-
-function prev() { if (cur > 1) goToWithReveal(cur - 1); }
-function next() { if (cur < total) goToWithReveal(cur + 1); }
-
-function revealSlide(slideId) { /* no-op — elements always visible */ }
-function goToWithReveal(n) { goTo(n); }
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
-  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prev();
+document.querySelectorAll('.bc,.tc,.kpi,.rc,.frente,.fb').forEach(function(card){
+  card.addEventListener('mousemove',function(e){var r=card.getBoundingClientRect();var x=(e.clientX-r.left)/r.width-.5;var y=(e.clientY-r.top)/r.height-.5;card.style.transform='perspective(800px) rotateX('+(-y*6).toFixed(2)+'deg) rotateY('+(x*6).toFixed(2)+'deg) translateY(-4px) scale(1.012)';card.style.zIndex='5'});
+  card.addEventListener('mouseleave',function(){card.style.transform='';card.style.zIndex=''});
 });
-
-/* ── SPOTLIGHT EFFECT ON FRENTE CARDS ── */
-document.querySelectorAll('.frente-col').forEach(card => {
-  const spotlight = card.querySelector('.spotlight');
-  const color = card.dataset.bg || 'rgba(0,145,174,0.06)';
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    spotlight.style.background = `radial-gradient(320px circle at ${e.clientX-rect.left}px ${e.clientY-rect.top}px, ${color}, transparent 70%)`;
-  });
-  card.addEventListener('mouseleave', () => { spotlight.style.background = 'transparent'; });
-});
-
-/* ── TILT EFFECT ON CARDS ── */
-function addTilt(selector, maxTilt = 8, liftY = -6, shadow = '0 16px 40px rgba(45,62,80,0.13)') {
-  document.querySelectorAll(selector).forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width  - 0.5;  // -0.5 to 0.5
-      const y = (e.clientY - r.top)  / r.height - 0.5;
-      const tiltX = (-y * maxTilt).toFixed(2);
-      const tiltY = ( x * maxTilt).toFixed(2);
-      card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(${liftY}px) scale(1.02)`;
-      card.style.boxShadow = shadow;
-      card.style.zIndex = '2';
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-      card.style.boxShadow = '';
-      card.style.zIndex = '';
-    });
-  });
-}
-
-addTilt('.feature-item', 7, -5, '0 12px 36px rgba(45,62,80,0.12)');
-addTilt('.canal-card',   7, -5, '0 12px 36px rgba(45,62,80,0.12)');
-addTilt('.frente-col',   6, -4, '0 16px 40px rgba(45,62,80,0.18)');
-
 </script>
 </body>
 </html>
